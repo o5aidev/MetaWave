@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  MetaCognition
+//  MetaWave
 //
 //  Created by 渡部一生 on 2025/10/21.
 //
@@ -23,12 +23,12 @@ struct ContentView: View {
                 if items.isEmpty {
                     // 空状態
                     VStack(spacing: 16) {
-                        Text("MetaCognition")
+                        Text("MetaWave")
                             .font(.largeTitle).bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         VStack(spacing: 8) {
-                            Text("MetaCognition 起動テスト")
+                            Text("MetaWave 起動テスト")
                                 .font(.title3).bold()
                             Text("iPhone 14 Pro Max (iOS 26.0.1)")
                                 .foregroundStyle(.secondary)
@@ -69,7 +69,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("MetaCognition")
+            .navigationTitle("MetaWave")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
