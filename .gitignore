@@ -1,22 +1,13 @@
-# Miyabi
-.miyabi.yml
-.worktrees/
-logs/
-reports/
-*.log
+cat > .gitignore <<'EOF'
+# macOS
+.DS_Store
 
-# Environment
-.env
-.env.local
+# Xcode build and user data
+DerivedData/
+build/
+*.xcuserdatad/
+*.xcscmblueprint
+xcuserdata/
 
-# Dependencies
-node_modules/
-target/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-!.miyabi.yml
+# Autocreated or local-only
+*.xctestplan
