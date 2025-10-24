@@ -6,83 +6,43 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		014DA1D62EA6A8D8009139E4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 014DA1BB2EA6A8D7009139E4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 014DA1C22EA6A8D7009139E4;
-			remoteInfo = MetaCognition;
-		};
-		014DA1E02EA6A8D8009139E4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 014DA1BB2EA6A8D7009139E4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 014DA1C22EA6A8D7009139E4;
-			remoteInfo = MetaCognition;
-		};
-/* End PBXContainerItemProxy section */
+/* Begin PBXBuildFile section */
+		014258202EAA79190016E590 /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258192EAA79190016E590 /* Vault.swift */; };
+		014258212EAA79190016E590 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258172EAA79190016E590 /* Keychain.swift */; };
+		014258232EAA79190016E590 /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258182EAA79190016E590 /* Migration.swift */; };
+		014258242EAA79190016E590 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 014258162EAA79190016E590 /* Assets.xcassets */; };
+		014258252EAA79190016E590 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 014258162EAA79190016E590 /* Assets.xcassets */; };
+		014258262EAA79190016E590 /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258192EAA79190016E590 /* Vault.swift */; };
+		014258272EAA79190016E590 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258172EAA79190016E590 /* Keychain.swift */; };
+		014258292EAA79190016E590 /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258182EAA79190016E590 /* Migration.swift */; };
+		0142582C2EAA7A600016E590 /* MetaWave Dev.app in Resources */ = {isa = PBXBuildFile; fileRef = 0180F3562EA7DC38007086B7 /* MetaWave Dev.app */; };
+		0142582D2EAA7A600016E590 /* MetaWave Dev.app in Resources */ = {isa = PBXBuildFile; fileRef = 0180F3562EA7DC38007086B7 /* MetaWave Dev.app */; };
+		014258312EAA93250016E590 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258302EAA93250016E590 /* Persistence.swift */; };
+		014258322EAA93250016E590 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258302EAA93250016E590 /* Persistence.swift */; };
+		014258362EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 014258332EAA93440016E590 /* MetaWave.xcdatamodeld */; };
+		014258372EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 014258332EAA93440016E590 /* MetaWave.xcdatamodeld */; };
+		014258392EAA93650016E590 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258382EAA93650016E590 /* ContentView.swift */; };
+		0142583A2EAA93650016E590 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258382EAA93650016E590 /* ContentView.swift */; };
+		0142583C2EAA93970016E590 /* MetaCognitionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0142583B2EAA93970016E590 /* MetaCognitionApp.swift */; };
+		0142583D2EAA93970016E590 /* MetaCognitionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0142583B2EAA93970016E590 /* MetaCognitionApp.swift */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		014258162EAA79190016E590 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		014258172EAA79190016E590 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		014258182EAA79190016E590 /* Migration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migration.swift; sourceTree = "<group>"; };
+		014258192EAA79190016E590 /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
+		0142581C2EAA79190016E590 /* MetaWave.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = MetaWave.xcodeproj; sourceTree = "<group>"; };
+		014258302EAA93250016E590 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		014258352EAA93440016E590 /* MetaWave.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MetaWave.xcdatamodel; sourceTree = "<group>"; };
+		014258382EAA93650016E590 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0142583B2EAA93970016E590 /* MetaCognitionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaCognitionApp.swift; sourceTree = "<group>"; };
 		014DA1C32EA6A8D7009139E4 /* MetaWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetaWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		014DA1D52EA6A8D8009139E4 /* MetaCognitionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetaCognitionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		014DA1DF2EA6A8D8009139E4 /* MetaCognitionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetaCognitionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0180F3562EA7DC38007086B7 /* MetaWave Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MetaWave Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0180F3572EA7DC38007086B7 /* Exceptions for "MetaCognition" folder in "MetaWave Dev" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Assets.xcassets,
-				ContentView.swift,
-				MetaCognitionApp.swift,
-				Persistence.swift,
-				Security/Keychain.swift,
-				Security/Migration.swift,
-				Security/Vault.swift,
-			);
-			target = 0180F34F2EA7DC38007086B7 /* MetaWave Dev */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		014DA1C52EA6A8D7009139E4 /* MetaCognition */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				0180F3572EA7DC38007086B7 /* Exceptions for "MetaCognition" folder in "MetaWave Dev" target */,
-			);
-			path = MetaCognition;
-			sourceTree = "<group>";
-		};
-		014DA1D82EA6A8D8009139E4 /* MetaCognitionTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MetaCognitionTests;
-			sourceTree = "<group>";
-		};
-		014DA1E22EA6A8D8009139E4 /* MetaCognitionUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MetaCognitionUITests;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		014DA1C02EA6A8D7009139E4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		014DA1D22EA6A8D8009139E4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		014DA1DC2EA6A8D8009139E4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -99,13 +59,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0142581A2EAA79190016E590 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				014258172EAA79190016E590 /* Keychain.swift */,
+				014258182EAA79190016E590 /* Migration.swift */,
+				014258192EAA79190016E590 /* Vault.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		0142581B2EAA79190016E590 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				0142581A2EAA79190016E590 /* Security */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		0142581E2EAA79190016E590 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 		014DA1BA2EA6A8D7009139E4 = {
 			isa = PBXGroup;
 			children = (
-				014DA1C52EA6A8D7009139E4 /* MetaCognition */,
-				014DA1D82EA6A8D8009139E4 /* MetaCognitionTests */,
-				014DA1E22EA6A8D8009139E4 /* MetaCognitionUITests */,
+				0142583B2EAA93970016E590 /* MetaCognitionApp.swift */,
+				014258382EAA93650016E590 /* ContentView.swift */,
+				014258332EAA93440016E590 /* MetaWave.xcdatamodeld */,
+				014258302EAA93250016E590 /* Persistence.swift */,
 				014DA1C42EA6A8D7009139E4 /* Products */,
+				014258162EAA79190016E590 /* Assets.xcassets */,
+				0142581B2EAA79190016E590 /* Core */,
+				0142581C2EAA79190016E590 /* MetaWave.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,8 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				014DA1C32EA6A8D7009139E4 /* MetaWave.app */,
-				014DA1D52EA6A8D8009139E4 /* MetaCognitionTests.xctest */,
-				014DA1DF2EA6A8D8009139E4 /* MetaCognitionUITests.xctest */,
 				0180F3562EA7DC38007086B7 /* MetaWave Dev.app */,
 			);
 			name = Products;
@@ -135,61 +120,12 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				014DA1C52EA6A8D7009139E4 /* MetaCognition */,
-			);
 			name = MetaWave;
 			packageProductDependencies = (
 			);
 			productName = MetaCognition;
 			productReference = 014DA1C32EA6A8D7009139E4 /* MetaWave.app */;
 			productType = "com.apple.product-type.application";
-		};
-		014DA1D42EA6A8D8009139E4 /* MetaCognitionTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 014DA1EC2EA6A8D8009139E4 /* Build configuration list for PBXNativeTarget "MetaCognitionTests" */;
-			buildPhases = (
-				014DA1D12EA6A8D8009139E4 /* Sources */,
-				014DA1D22EA6A8D8009139E4 /* Frameworks */,
-				014DA1D32EA6A8D8009139E4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				014DA1D72EA6A8D8009139E4 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				014DA1D82EA6A8D8009139E4 /* MetaCognitionTests */,
-			);
-			name = MetaCognitionTests;
-			packageProductDependencies = (
-			);
-			productName = MetaCognitionTests;
-			productReference = 014DA1D52EA6A8D8009139E4 /* MetaCognitionTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		014DA1DE2EA6A8D8009139E4 /* MetaCognitionUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 014DA1EF2EA6A8D8009139E4 /* Build configuration list for PBXNativeTarget "MetaCognitionUITests" */;
-			buildPhases = (
-				014DA1DB2EA6A8D8009139E4 /* Sources */,
-				014DA1DC2EA6A8D8009139E4 /* Frameworks */,
-				014DA1DD2EA6A8D8009139E4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				014DA1E12EA6A8D8009139E4 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				014DA1E22EA6A8D8009139E4 /* MetaCognitionUITests */,
-			);
-			name = MetaCognitionUITests;
-			packageProductDependencies = (
-			);
-			productName = MetaCognitionUITests;
-			productReference = 014DA1DF2EA6A8D8009139E4 /* MetaCognitionUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		0180F34F2EA7DC38007086B7 /* MetaWave Dev */ = {
 			isa = PBXNativeTarget;
@@ -202,9 +138,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				014DA1C52EA6A8D7009139E4 /* MetaCognition */,
 			);
 			name = "MetaWave Dev";
 			packageProductDependencies = (
@@ -226,14 +159,6 @@
 					014DA1C22EA6A8D7009139E4 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
-					014DA1D42EA6A8D8009139E4 = {
-						CreatedOnToolsVersion = 26.0.1;
-						TestTargetID = 014DA1C22EA6A8D7009139E4;
-					};
-					014DA1DE2EA6A8D8009139E4 = {
-						CreatedOnToolsVersion = 26.0.1;
-						TestTargetID = 014DA1C22EA6A8D7009139E4;
-					};
 				};
 			};
 			buildConfigurationList = 014DA1BE2EA6A8D7009139E4 /* Build configuration list for PBXProject "MetaWave" */;
@@ -248,11 +173,15 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 014DA1C42EA6A8D7009139E4 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0142581E2EAA79190016E590 /* Products */;
+					ProjectRef = 0142581C2EAA79190016E590 /* MetaWave.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				014DA1C22EA6A8D7009139E4 /* MetaWave */,
-				014DA1D42EA6A8D8009139E4 /* MetaCognitionTests */,
-				014DA1DE2EA6A8D8009139E4 /* MetaCognitionUITests */,
 				0180F34F2EA7DC38007086B7 /* MetaWave Dev */,
 			);
 		};
@@ -263,20 +192,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		014DA1D32EA6A8D8009139E4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		014DA1DD2EA6A8D8009139E4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				0142582C2EAA7A600016E590 /* MetaWave Dev.app in Resources */,
+				014258252EAA79190016E590 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +201,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0142582D2EAA7A600016E590 /* MetaWave Dev.app in Resources */,
+				014258242EAA79190016E590 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,20 +213,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		014DA1D12EA6A8D8009139E4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		014DA1DB2EA6A8D8009139E4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				014258262EAA79190016E590 /* Vault.swift in Sources */,
+				014258272EAA79190016E590 /* Keychain.swift in Sources */,
+				0142583A2EAA93650016E590 /* ContentView.swift in Sources */,
+				0142583D2EAA93970016E590 /* MetaCognitionApp.swift in Sources */,
+				014258292EAA79190016E590 /* Migration.swift in Sources */,
+				014258322EAA93250016E590 /* Persistence.swift in Sources */,
+				014258372EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,23 +227,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				014258202EAA79190016E590 /* Vault.swift in Sources */,
+				014258212EAA79190016E590 /* Keychain.swift in Sources */,
+				014258392EAA93650016E590 /* ContentView.swift in Sources */,
+				0142583C2EAA93970016E590 /* MetaCognitionApp.swift in Sources */,
+				014258232EAA79190016E590 /* Migration.swift in Sources */,
+				014258312EAA93250016E590 /* Persistence.swift in Sources */,
+				014258362EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		014DA1D72EA6A8D8009139E4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 014DA1C22EA6A8D7009139E4 /* MetaWave */;
-			targetProxy = 014DA1D62EA6A8D8009139E4 /* PBXContainerItemProxy */;
-		};
-		014DA1E12EA6A8D8009139E4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 014DA1C22EA6A8D7009139E4 /* MetaWave */;
-			targetProxy = 014DA1E02EA6A8D8009139E4 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		014DA1E72EA6A8D8009139E4 /* Debug */ = {
@@ -521,90 +427,6 @@
 			};
 			name = Release;
 		};
-		014DA1ED2EA6A8D8009139E4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R6B6X9PGZ5;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.555.MetaCognitionTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MetaCognition.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MetaCognition";
-			};
-			name = Debug;
-		};
-		014DA1EE2EA6A8D8009139E4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R6B6X9PGZ5;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.555.MetaCognitionTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MetaCognition.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MetaCognition";
-			};
-			name = Release;
-		};
-		014DA1F02EA6A8D8009139E4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R6B6X9PGZ5;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.555.MetaCognitionUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MetaCognition;
-			};
-			name = Debug;
-		};
-		014DA1F12EA6A8D8009139E4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R6B6X9PGZ5;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.555.MetaCognitionUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MetaCognition;
-			};
-			name = Release;
-		};
 		0180F3542EA7DC38007086B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -690,24 +512,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		014DA1EC2EA6A8D8009139E4 /* Build configuration list for PBXNativeTarget "MetaCognitionTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				014DA1ED2EA6A8D8009139E4 /* Debug */,
-				014DA1EE2EA6A8D8009139E4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		014DA1EF2EA6A8D8009139E4 /* Build configuration list for PBXNativeTarget "MetaCognitionUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				014DA1F02EA6A8D8009139E4 /* Debug */,
-				014DA1F12EA6A8D8009139E4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		0180F3532EA7DC38007086B7 /* Build configuration list for PBXNativeTarget "MetaWave Dev" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -718,6 +522,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		014258332EAA93440016E590 /* MetaWave.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				014258352EAA93440016E590 /* MetaWave.xcdatamodel */,
+			);
+			currentVersion = 014258352EAA93440016E590 /* MetaWave.xcdatamodel */;
+			path = MetaWave.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 014DA1BB2EA6A8D7009139E4 /* Project object */;
 }
