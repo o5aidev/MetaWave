@@ -1,5 +1,6 @@
 import Foundation
 import CryptoKit
+import SwiftUI
 
 /// 暗号化されたデータブロブ
 struct EncryptedBlob {
