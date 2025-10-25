@@ -172,6 +172,28 @@ struct ContentView: View {
                 Text("Settings")
             }
             .tag(2)
+            
+            // Sharing Tab
+            NavigationView {
+                // SharingView(persistentContainer: PersistenceController.shared.container, vault: Vault.shared)
+                VStack {
+                    Text("共有機能")
+                        .font(.largeTitle)
+                        .padding()
+                    
+                    Text("v2.2で実装予定")
+                        .foregroundColor(.secondary)
+                        .padding()
+                    
+                    Spacer()
+                }
+                .navigationTitle("共有")
+            }
+            .tabItem {
+                Image(systemName: "square.and.arrow.up")
+                Text("Sharing")
+            }
+            .tag(3)
         }
     }
 
@@ -589,6 +611,7 @@ struct SettingsView: View {
     @State private var showingDeleteAlert = false
     @State private var showingExportAlert = false
     @State private var showingPruningView = false
+    // @StateObject private var cloudSyncService = CloudSyncService(persistentContainer: PersistenceController.shared.container, vault: Vault.shared)
     
     var body: some View {
         List {
@@ -603,7 +626,7 @@ struct SettingsView: View {
                         .cornerRadius(10)
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("MetaWave v2.0")
+                        Text("MetaWave v2.2")
                             .font(.headline)
                             .fontWeight(.semibold)
                         Text("メタ認知パートナー")
@@ -617,6 +640,19 @@ struct SettingsView: View {
                     Spacer()
                 }
                 .padding(.vertical, 8)
+            }
+            
+            // 同期セクション
+            Section("同期") {
+                // SyncStatusView(cloudSyncService: cloudSyncService)
+                HStack {
+                    Image(systemName: "icloud")
+                        .foregroundColor(.blue)
+                    Text("クラウド同期")
+                    Spacer()
+                    Text("準備中")
+                        .foregroundColor(.secondary)
+                }
             }
             
             // データ管理セクション
