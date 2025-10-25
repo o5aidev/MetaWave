@@ -15,8 +15,6 @@
 		014258262EAA79190016E590 /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258192EAA79190016E590 /* Vault.swift */; };
 		014258272EAA79190016E590 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258172EAA79190016E590 /* Keychain.swift */; };
 		014258292EAA79190016E590 /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258182EAA79190016E590 /* Migration.swift */; };
-		0142582C2EAA7A600016E590 /* MetaWave Dev.app in Resources */ = {isa = PBXBuildFile; fileRef = 0180F3562EA7DC38007086B7 /* MetaWave Dev.app */; };
-		0142582D2EAA7A600016E590 /* MetaWave Dev.app in Resources */ = {isa = PBXBuildFile; fileRef = 0180F3562EA7DC38007086B7 /* MetaWave Dev.app */; };
 		014258312EAA93250016E590 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258302EAA93250016E590 /* Persistence.swift */; };
 		014258322EAA93250016E590 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258302EAA93250016E590 /* Persistence.swift */; };
 		014258362EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 014258332EAA93440016E590 /* MetaWave.xcdatamodeld */; };
@@ -192,7 +190,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0142582C2EAA7A600016E590 /* MetaWave Dev.app in Resources */,
 				014258252EAA79190016E590 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -201,7 +198,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0142582D2EAA7A600016E590 /* MetaWave Dev.app in Resources */,
 				014258242EAA79190016E590 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
