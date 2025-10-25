@@ -5,4 +5,27 @@
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
     </entity>
+    <entity name="Note" representedClassName="Note" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modality" attributeType="String"/>
+        <attribute name="contentText" optional="YES" attributeType="String"/>
+        <attribute name="audioURL" optional="YES" attributeType="URI"/>
+        <attribute name="imageURL" optional="YES" attributeType="URI"/>
+        <attribute name="tags" optional="YES" attributeType="String"/>
+        <attribute name="topicHash" optional="YES" attributeType="String"/>
+        <attribute name="sentiment" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="arousal" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="biasSignals" optional="YES" attributeType="String"/>
+        <attribute name="loopGroupID" optional="YES" attributeType="String"/>
+        <attribute name="encNonce" optional="YES" attributeType="Binary"/>
+    </entity>
+    <entity name="Insight" representedClassName="Insight" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="noteIDs" optional="YES" attributeType="String"/>
+        <attribute name="kind" attributeType="String"/>
+        <attribute name="payload" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
 </model>

@@ -1,14 +1,14 @@
 //
-//  ContentView.swift
+//  ContentView_Simple.swift
 //  MetaWave
 //
-//  Created by 渡部一生 on 2025/10/21.
+//  簡素化されたContentView（新機能統合前の基本版）
 //
 
 import SwiftUI
 import CoreData
 
-struct ContentView: View {
+struct ContentView_Simple: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
@@ -50,56 +50,21 @@ struct ContentView: View {
                     List {
                         ForEach(items) { item in
                             NavigationLink {
-                                // Detailed view
-                                VStack(alignment: .leading, spacing: 16) {
-                                    HStack {
-                                        Image(systemName: "bolt.fill")
-                                            .font(.system(size: 48))
-                                            .foregroundColor(.yellow)
-                                        VStack(alignment: .leading) {
-                                            Text(item.title ?? "Untitled")
-                                                .font(.title2)
-                                                .fontWeight(.bold)
-                                            Text(item.timestamp ?? Date(), formatter: itemFormatter)
-                                                .font(.caption)
-                                                .foregroundColor(.secondary)
-                                        }
-                                        Spacer()
-                                    }
-                                    
-                                    if let note = item.note, !note.isEmpty {
-                                        VStack(alignment: .leading, spacing: 8) {
-                                            Text("Note")
-                                                .font(.headline)
-                                            Text(note)
-                                                .font(.body)
-                                                .padding()
-                                                .background(Color(.systemGray6))
-                                                .cornerRadius(8)
-                                        }
-                                    }
-                                    
-                                    Spacer()
-                                }
-                                .padding()
-                                .navigationTitle("Item Detail")
-                            } label: {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    HStack {
-                                        Image(systemName: "bolt.fill")
-                                            .foregroundStyle(.yellow)
-                                        Text(item.title ?? "Untitled")
-                                            .font(.headline)
-                                    }
-                                    if let note = item.note, !note.isEmpty {
-                                        Text(note)
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                            .lineLimit(2)
-                                    }
+                                // Simple detail
+                                VStack(spacing: 12) {
+                                    Image(systemName: "bolt.fill")
+                                        .font(.system(size: 48))
                                     Text(item.timestamp ?? Date(), formatter: itemFormatter)
-                                        .font(.caption2)
-                                        .foregroundColor(.secondary)
+                                        .font(.title3)
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .padding()
+                                .navigationTitle("Detail")
+                            } label: {
+                                HStack {
+                                    Image(systemName: "bolt.fill")
+                                        .foregroundStyle(.yellow)
+                                    Text(item.timestamp ?? Date(), formatter: itemFormatter)
                                 }
                             }
                         }
@@ -131,8 +96,6 @@ struct ContentView: View {
         withAnimation {
             let newItem = Item(context: viewContext)
             newItem.timestamp = Date()
-            newItem.title = "Sample Item" // titleフィールドを設定
-            newItem.note = "This is a sample note for testing" // noteフィールドも設定
 
             do {
                 try viewContext.save()
@@ -167,8 +130,8 @@ private let itemFormatter: DateFormatter = {
 
 // MARK: - Preview
 
-struct ContentView_Previews: PreviewProvider {
+struct ContentView_Simple_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView_Simple().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

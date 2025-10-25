@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>MetaWave needs microphone access to record your thoughts and analyze your voice patterns for meta-cognitive insights.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>MetaWave uses speech recognition to transcribe your voice recordings into text for analysis and storage.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>MetaWave can access your photo library to save and analyze images related to your thoughts and experiences.</string>
+</dict>
+</plist>
