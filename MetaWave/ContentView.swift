@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var selectedTab = 0
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
@@ -18,7 +19,9 @@ struct ContentView: View {
     private var items: FetchedResults<Item>
 
     var body: some View {
-        NavigationView {
+        TabView(selection: $selectedTab) {
+            // Notes Tab
+            NavigationView {
             Group {
                 if items.isEmpty {
                     // Empty state UI
@@ -107,7 +110,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("MetaWave v2.0")
+            .navigationTitle("Notes")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -121,6 +124,74 @@ struct ContentView: View {
                     .accessibilityIdentifier("addButton")
                 }
             }
+            }
+            .tabItem {
+                Image(systemName: "note.text")
+                Text("Notes")
+            }
+            .tag(0)
+            
+            // Insights Tab (Placeholder)
+            NavigationView {
+                VStack(spacing: 20) {
+                    Image(systemName: "brain.head.profile")
+                        .font(.system(size: 60))
+                        .foregroundColor(.blue)
+                    
+                    Text("Insights")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    
+                    Text("分析機能は準備中です")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                    
+                    Text("感情分析、ループ検出、バイアス検出などの機能が追加予定です。")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .navigationTitle("Insights")
+            }
+            .tabItem {
+                Image(systemName: "brain.head.profile")
+                Text("Insights")
+            }
+            .tag(1)
+            
+            // Settings Tab (Placeholder)
+            NavigationView {
+                VStack(spacing: 20) {
+                    Image(systemName: "gear")
+                        .font(.system(size: 60))
+                        .foregroundColor(.gray)
+                    
+                    Text("Settings")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    
+                    Text("設定機能は準備中です")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                    
+                    Text("セキュリティ設定、データ管理、分析設定などの機能が追加予定です。")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .navigationTitle("Settings")
+            }
+            .tabItem {
+                Image(systemName: "gear")
+                Text("Settings")
+            }
+            .tag(2)
         }
     }
 
