@@ -173,25 +173,13 @@ struct ContentView: View {
             }
             .tag(2)
             
-            // Sharing Tab
+            // Sync & Sharing Tab
             NavigationView {
-                // SharingView(persistentContainer: PersistenceController.shared.container, vault: Vault.shared)
-                VStack {
-                    Text("共有機能")
-                        .font(.largeTitle)
-                        .padding()
-                    
-                    Text("v2.2で実装予定")
-                        .foregroundColor(.secondary)
-                        .padding()
-                    
-                    Spacer()
-                }
-                .navigationTitle("共有")
+                SyncStatusView()
             }
             .tabItem {
-                Image(systemName: "square.and.arrow.up")
-                Text("Sharing")
+                Image(systemName: "icloud")
+                Text("同期・共有")
             }
             .tag(3)
         }
