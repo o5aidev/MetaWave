@@ -25,10 +25,10 @@ protocol Vaulting {
 final class Vault: Vaulting {
     static let shared = Vault()
     
-    private static let keyName = "app.masterKey"
+        private static let keyName = "app.masterKey"
     private var symmetricKey: SymmetricKey?
-    
-    private init() {}
+
+    init() {}
     
     // MARK: - Vaulting Protocol
     

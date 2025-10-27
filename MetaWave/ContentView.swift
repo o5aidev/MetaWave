@@ -142,7 +142,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showVoiceInput_v2_1) {
-                SimpleVoiceInputView { text in
+                VoiceInputView_v2_1(vault: Vault.shared) { text in
                     addVoiceNote(text: text)
                 }
             }

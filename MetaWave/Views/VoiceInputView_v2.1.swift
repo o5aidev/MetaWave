@@ -25,6 +25,19 @@ struct VoiceInputView_v2_1: View {
         self.onSave = onSave
     }
     
+    // MARK: - 部分結果の監視
+    private func setupPartialResultObserver() {
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("SpeechRecognitionPartialResult"),
+            object: nil,
+            queue: .main
+        ) { notification in
+            if let text = notification.userInfo?["text"] as? String {
+                recognizedText = text
+            }
+        }
+    }
+    
     // MARK: - ビュー
     var body: some View {
         NavigationView {
@@ -56,6 +69,9 @@ struct VoiceInputView_v2_1: View {
                         dismiss()
                     }
                 }
+            }
+            .onAppear {
+                setupPartialResultObserver()
             }
             .alert("エラー", isPresented: $showError) {
                 Button("OK") { }
@@ -136,16 +152,18 @@ struct VoiceInputView_v2_1: View {
             Button("クリア") {
                 clearText()
             }
-            .disabled(recognizedText.isEmpty || isRecording)
-            .foregroundColor(.secondary)
+            .disabled(isRecording) // 録音中のみ無効化
+            .foregroundColor(recognizedText.isEmpty ? .gray : .secondary)
+            .opacity(recognizedText.isEmpty ? 0.5 : 1.0)
             
             // 保存ボタン
             Button("保存") {
                 saveText()
             }
-            .disabled(recognizedText.isEmpty || isRecording)
-            .foregroundColor(.blue)
+            .disabled(recognizedText.isEmpty || isRecording) // 空または録音中は無効化
+            .foregroundColor(recognizedText.isEmpty ? .gray : .blue)
             .fontWeight(.semibold)
+            .opacity(recognizedText.isEmpty ? 0.5 : 1.0)
         }
         .font(.headline)
     }
@@ -162,7 +180,7 @@ struct VoiceInputView_v2_1: View {
     // MARK: - 録音の開始
     private func startRecording() {
         isRecording = true
-        isProcessing = true
+        isProcessing = false  // 録音中は処理中ではない
         recordingDuration = 0
         recognizedText = ""
         errorMessage = nil
@@ -182,6 +200,7 @@ struct VoiceInputView_v2_1: View {
                     isProcessing = false
                     recordingTimer?.invalidate()
                     recordingTimer = nil
+                    print("✅ 音声認識完了、UI更新: \(result.text)")
                 }
             } catch {
                 await MainActor.run {
@@ -191,6 +210,7 @@ struct VoiceInputView_v2_1: View {
                     recordingTimer = nil
                     errorMessage = error.localizedDescription
                     showError = true
+                    print("❌ 音声認識エラー: \(error.localizedDescription)")
                 }
             }
         }

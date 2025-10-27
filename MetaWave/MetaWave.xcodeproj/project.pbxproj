@@ -23,6 +23,10 @@
 		0142583A2EAA93650016E590 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014258382EAA93650016E590 /* ContentView.swift */; };
 		0142583C2EAA93970016E590 /* MetaCognitionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0142583B2EAA93970016E590 /* MetaCognitionApp.swift */; };
 		0142583D2EAA93970016E590 /* MetaCognitionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0142583B2EAA93970016E590 /* MetaCognitionApp.swift */; };
+		0180F3572EAD16DD0070A38B /* VoiceInputView_v2.1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F3582EAD16DD0070A38B /* VoiceInputView_v2.1.swift */; };
+		0180F3592EAD16DD0070A38B /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F35A2EAD16DD0070A38B /* SpeechRecognitionService.swift */; };
+		0180F35B2EAD16DD0070A38B /* VoiceInputView_v2.1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F3582EAD16DD0070A38B /* VoiceInputView_v2.1.swift */; };
+		0180F35C2EAD16DD0070A38B /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F35A2EAD16DD0070A38B /* SpeechRecognitionService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +40,11 @@
 		014258382EAA93650016E590 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0142583B2EAA93970016E590 /* MetaCognitionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaCognitionApp.swift; sourceTree = "<group>"; };
 		014DA1C32EA6A8D7009139E4 /* MetaWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetaWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0158501F2EAD16CC0070A38B /* MetaWave.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetaWave.entitlements; sourceTree = "<group>"; };
+		015850202EAD16CC0070A38B /* MetaWave-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaWave-Info.plist"; sourceTree = "<group>"; };
 		0180F3562EA7DC38007086B7 /* MetaWave Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MetaWave Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0180F3582EAD16DD0070A38B /* VoiceInputView_v2.1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceInputView_v2.1.swift; sourceTree = "<group>"; };
+		0180F35A2EAD16DD0070A38B /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +91,8 @@
 		014DA1BA2EA6A8D7009139E4 = {
 			isa = PBXGroup;
 			children = (
+				015850202EAD16CC0070A38B /* MetaWave-Info.plist */,
+				0158501F2EAD16CC0070A38B /* MetaWave.entitlements */,
 				0142583B2EAA93970016E590 /* MetaCognitionApp.swift */,
 				014258382EAA93650016E590 /* ContentView.swift */,
 				014258332EAA93440016E590 /* MetaWave.xcdatamodeld */,
@@ -90,6 +100,8 @@
 				014DA1C42EA6A8D7009139E4 /* Products */,
 				014258162EAA79190016E590 /* Assets.xcassets */,
 				0142581B2EAA79190016E590 /* Core */,
+				014258442EAA93B00016E590 /* Views */,
+				014258462EAA93B10016E590 /* Modules */,
 				0142581C2EAA79190016E590 /* MetaWave.xcodeproj */,
 			);
 			sourceTree = "<group>";
@@ -101,6 +113,30 @@
 				0180F3562EA7DC38007086B7 /* MetaWave Dev.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		014258442EAA93B00016E590 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0180F3582EAD16DD0070A38B /* VoiceInputView_v2.1.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		014258462EAA93B10016E590 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				014258472EAA93B20016E590 /* InputKit */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		014258472EAA93B20016E590 /* InputKit */ = {
+			isa = PBXGroup;
+			children = (
+				0180F35A2EAD16DD0070A38B /* SpeechRecognitionService.swift */,
+			);
+			path = InputKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,6 +252,8 @@
 				014258292EAA79190016E590 /* Migration.swift in Sources */,
 				014258322EAA93250016E590 /* Persistence.swift in Sources */,
 				014258372EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */,
+				0180F3572EAD16DD0070A38B /* VoiceInputView_v2.1.swift in Sources */,
+				0180F3592EAD16DD0070A38B /* SpeechRecognitionService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +268,8 @@
 				014258232EAA79190016E590 /* Migration.swift in Sources */,
 				014258312EAA93250016E590 /* Persistence.swift in Sources */,
 				014258362EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */,
+				0180F35B2EAD16DD0070A38B /* VoiceInputView_v2.1.swift in Sources */,
+				0180F35C2EAD16DD0070A38B /* SpeechRecognitionService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,12 +402,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MetaWave.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R6B6X9PGZ5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MetaWave-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = MetaWave;
+				INFOPLIST_KEY_GCSupportsControllerUserInteraction = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声入力を記録するためにマイクへのアクセスが必要です。";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "音声を文字に変換するために音声認識機能へのアクセスが必要です。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -395,12 +440,44 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MetaWave.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R6B6X9PGZ5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MetaWave-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = MetaWave;
+				INFOPLIST_KEY_GCSupportsControllerUserInteraction = YES;
+				INFOPLIST_KEY_NFCReaderUsageDescription = "";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
+				INFOPLIST_KEY_NSBluetoothWhileInUseUsageDescription = "";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "";
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSContactsUsageDescription = "";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "";
+				INFOPLIST_KEY_NSFallDetectionUsageDescription = "";
+				INFOPLIST_KEY_NSFinancialDataUsageDescription = "";
+				INFOPLIST_KEY_NSGKFriendListUsageDescription = "";
+				INFOPLIST_KEY_NSIdentityUsageDescription = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSMotionUsageDescription = "";
+				INFOPLIST_KEY_NSNearbyInteractionAllowOnceUsageDescription = "";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
+				INFOPLIST_KEY_NSRemindersFullAccessUsageDescription = "";
+				INFOPLIST_KEY_NSSensorKitUsageDescription = "";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "";
+				INFOPLIST_KEY_NSSystemExtensionUsageDescription = "";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "";
+				INFOPLIST_KEY_NSVoIPUsageDescription = "";
+				INFOPLIST_KEY_OSBundleUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
