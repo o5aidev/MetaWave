@@ -7,11 +7,14 @@
 
 import SwiftUI
 import CoreData
+import Speech
+import AVFoundation
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var selectedTab = 0
     @State private var showVoiceInput = false
+    @State private var showVoiceInput_v2_1 = false
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
@@ -22,7 +25,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             // Notes Tab
-            NavigationView {
+        NavigationView {
             Group {
                 if items.isEmpty {
                     // Empty state UI
@@ -43,7 +46,7 @@ struct ContentView: View {
                         Button("サンプルを1件追加") {
                             addSample()
                         }
-                        .buttonStyle(.borderedProminent)
+                            .buttonStyle(.borderedProminent)
                         .controlSize(.large)
 
                         Spacer()
@@ -57,14 +60,14 @@ struct ContentView: View {
                                 // Detailed view
                                 VStack(alignment: .leading, spacing: 16) {
                                     HStack {
-                                        Image(systemName: "bolt.fill")
-                                            .font(.system(size: 48))
+                                    Image(systemName: "bolt.fill")
+                                        .font(.system(size: 48))
                                             .foregroundColor(.yellow)
                                         VStack(alignment: .leading) {
                                             Text(item.title ?? "Untitled")
                                                 .font(.title2)
                                                 .fontWeight(.bold)
-                                            Text(item.timestamp ?? Date(), formatter: itemFormatter)
+                                    Text(item.timestamp ?? Date(), formatter: itemFormatter)
                                                 .font(.caption)
                                                 .foregroundColor(.secondary)
                                         }
@@ -89,9 +92,9 @@ struct ContentView: View {
                                 .navigationTitle("Item Detail")
                             } label: {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    HStack {
-                                        Image(systemName: "bolt.fill")
-                                            .foregroundStyle(.yellow)
+                                HStack {
+                                    Image(systemName: "bolt.fill")
+                                        .foregroundStyle(.yellow)
                                         Text(item.title ?? "Untitled")
                                             .font(.headline)
                                     }
@@ -126,7 +129,7 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        showVoiceInput = true
+                        showVoiceInput_v2_1 = true
                     } label: {
                         Label("Voice", systemImage: "mic.fill")
                     }
@@ -135,6 +138,11 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showVoiceInput) {
                 SimpleVoiceInputView { text in
+                    addVoiceNote(text: text)
+                }
+            }
+            .sheet(isPresented: $showVoiceInput_v2_1) {
+                VoiceInputView_v2_1(vault: Vault.shared) { text in
                     addVoiceNote(text: text)
                 }
             }
@@ -164,6 +172,28 @@ struct ContentView: View {
                 Text("Settings")
             }
             .tag(2)
+            
+            // Sharing Tab
+            NavigationView {
+                // SharingView(persistentContainer: PersistenceController.shared.container, vault: Vault.shared)
+                VStack {
+                    Text("共有機能")
+                        .font(.largeTitle)
+                        .padding()
+                    
+                    Text("v2.2で実装予定")
+                        .foregroundColor(.secondary)
+                        .padding()
+                    
+                    Spacer()
+                }
+                .navigationTitle("共有")
+            }
+            .tabItem {
+                Image(systemName: "square.and.arrow.up")
+                Text("Sharing")
+            }
+            .tag(3)
         }
     }
 
@@ -208,10 +238,22 @@ struct ContentView: View {
             
             do {
                 try viewContext.save()
+                
+                // 音声感情分析の実行（非同期）
+                Task {
+                    await analyzeVoiceEmotion(for: newItem)
+                }
             } catch {
                 print("[CoreData] Voice note save error:", error.localizedDescription)
             }
         }
+    }
+    
+    // MARK: - 音声感情分析
+    private func analyzeVoiceEmotion(for item: Item) async {
+        // 音声感情分析の実装（将来の拡張用）
+        // 現在はテキスト分析のみ実行
+        print("音声感情分析を実行: \(item.note ?? "")")
     }
 }
 
@@ -569,6 +611,7 @@ struct SettingsView: View {
     @State private var showingDeleteAlert = false
     @State private var showingExportAlert = false
     @State private var showingPruningView = false
+    // @StateObject private var cloudSyncService = CloudSyncService(persistentContainer: PersistenceController.shared.container, vault: Vault.shared)
     
     var body: some View {
         List {
@@ -583,7 +626,7 @@ struct SettingsView: View {
                         .cornerRadius(10)
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("MetaWave v2.0")
+                        Text("MetaWave v2.2")
                             .font(.headline)
                             .fontWeight(.semibold)
                         Text("メタ認知パートナー")
@@ -597,6 +640,19 @@ struct SettingsView: View {
                     Spacer()
                 }
                 .padding(.vertical, 8)
+            }
+            
+            // 同期セクション
+            Section("同期") {
+                // SyncStatusView(cloudSyncService: cloudSyncService)
+                HStack {
+                    Image(systemName: "icloud")
+                        .foregroundColor(.blue)
+                    Text("クラウド同期")
+                    Spacer()
+                    Text("準備中")
+                        .foregroundColor(.secondary)
+                }
             }
             
             // データ管理セクション

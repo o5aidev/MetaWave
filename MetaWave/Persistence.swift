@@ -22,7 +22,7 @@ struct PersistenceController {
         return c
     }()
 
-    // ▼ .xcdatamodeld の最終名と一致させる（MetaWave）
+    // ▼ ローカル保存のみ（CloudKit無効）
     let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
