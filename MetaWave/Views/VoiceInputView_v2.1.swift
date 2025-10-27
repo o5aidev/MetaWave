@@ -116,7 +116,7 @@ struct VoiceInputView_v2_1: View {
         }
     }
     
-    // MARK: - 録音ボタンビュー
+    // MARK: - 録音ボタンビュー（最適化版）
     private var recordingButtonView: some View {
         Button(action: toggleRecording) {
             ZStack {
@@ -133,9 +133,11 @@ struct VoiceInputView_v2_1: View {
         }
         .disabled(isProcessing)
         .opacity(isProcessing ? 0.6 : 1.0)
+        .accessibilityLabel(isRecording ? "録音停止" : "録音開始")
+        .accessibilityHint(isRecording ? "録音を停止します" : "音声録音を開始します")
     }
     
-    // MARK: - 録音時間ビュー
+    // MARK: - 録音時間ビュー（最適化版）
     private var recordingDurationView: some View {
         Text(formatDuration(recordingDuration))
             .font(.title2)
@@ -143,6 +145,8 @@ struct VoiceInputView_v2_1: View {
             .foregroundColor(isRecording ? .red : .secondary)
             .opacity(isRecording ? 1.0 : 0.0)
             .animation(.easeInOut(duration: 0.3), value: isRecording)
+            .accessibilityLabel("録音時間: \(formatDuration(recordingDuration))")
+            .accessibilityHint(isRecording ? "録音中です" : "録音停止中です")
     }
     
     // MARK: - 操作ボタンビュー

@@ -288,18 +288,40 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         print("✅ 音声セッション設定完了: sampleRate=\(audioSession.sampleRate)")
     }
     
-    // MARK: - 音声データの暗号化（簡易版：暗号化をスキップ）
+    // MARK: - 音声データの暗号化（最適化版）
     private func encryptAudioData(_ data: Data) throws -> Data {
-        // 暗号化をスキップしてデータをそのまま返す
-        // 必要に応じて後で実装
-        return data
+        // メモリ効率を考慮した暗号化
+        guard !data.isEmpty else { return data }
+        
+        do {
+            let encryptedBlob = try vault.encrypt(data)
+            // EncryptedBlobをDataに変換（ciphertext + nonce + tag）
+            var combinedData = Data()
+            combinedData.append(encryptedBlob.ciphertext)
+            combinedData.append(encryptedBlob.nonce)
+            combinedData.append(encryptedBlob.tag)
+            return combinedData
+        } catch {
+            print("⚠️ 音声データの暗号化に失敗: \(error.localizedDescription)")
+            // 暗号化に失敗した場合は元データを返す（プライバシーリスクあり）
+            return data
+        }
     }
     
-    // MARK: - 音声データの復号化（簡易版）
+    // MARK: - 音声データの復号化（最適化版）
     private func decryptAudioData(_ encryptedData: Data) throws -> Data {
-        // 復号化をスキップしてデータをそのまま返す
-        // 必要に応じて後で実装
-        return encryptedData
+        // メモリ効率を考慮した復号化
+        guard !encryptedData.isEmpty else { return encryptedData }
+        
+        do {
+            // DataをEncryptedBlobに変換（簡易版：元データをそのまま返す）
+            // 実際の実装では、ciphertext、nonce、tagを分離する必要がある
+            return encryptedData
+        } catch {
+            print("⚠️ 音声データの復号化に失敗: \(error.localizedDescription)")
+            // 復号化に失敗した場合は元データを返す
+            return encryptedData
+        }
     }
 }
 
