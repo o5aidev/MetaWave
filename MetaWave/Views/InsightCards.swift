@@ -15,7 +15,7 @@ struct InsightCardsView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    Image(systemName: "brain.head.profile")
+                    Image(systemName: "chart.bar.doc.horizontal")
                         .font(.system(size: 60))
                         .foregroundColor(.blue)
                     
@@ -27,9 +27,14 @@ struct InsightCardsView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
-                    Text("現在利用可能:\n• パターン分析\n• 予測分析")
-                        .font(.body)
-                        .multilineTextAlignment(.center)
+                    VStack(alignment: .leading, spacing: 12) {
+                        Label("パターン分析", systemImage: "chart.line.uptrend.xyaxis")
+                        Label("予測分析", systemImage: "chart.bar.xaxis")
+                    }
+                    .font(.body)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
                 }
                 .padding()
             }

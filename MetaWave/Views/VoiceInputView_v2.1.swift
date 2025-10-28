@@ -15,6 +15,11 @@ struct VoiceInputView_v2_1: View {
     @State private var showError = false
     @State private var recordingDuration: TimeInterval = 0
     @State private var recordingTimer: Timer?
+    @State private var showTimeLimitAlert = false
+    
+    // 録音時間制限
+    private let maxRecordingDuration: TimeInterval = 60.0
+    private let warningDuration: TimeInterval = 50.0
     
     // コールバック
     let onSave: (String) -> Void
@@ -78,6 +83,11 @@ struct VoiceInputView_v2_1: View {
             } message: {
                 Text(errorMessage ?? "不明なエラーが発生しました")
             }
+            .alert("録音時間制限", isPresented: $showTimeLimitAlert) {
+                Button("OK") { }
+            } message: {
+                Text("最大録音時間（60秒）に達しました。録音を停止しました。")
+            }
         }
     }
     
@@ -139,14 +149,24 @@ struct VoiceInputView_v2_1: View {
     
     // MARK: - 録音時間ビュー（最適化版）
     private var recordingDurationView: some View {
-        Text(formatDuration(recordingDuration))
-            .font(.title2)
-            .fontWeight(.bold)
-            .foregroundColor(isRecording ? .red : .secondary)
-            .opacity(isRecording ? 1.0 : 0.0)
-            .animation(.easeInOut(duration: 0.3), value: isRecording)
-            .accessibilityLabel("録音時間: \(formatDuration(recordingDuration))")
-            .accessibilityHint(isRecording ? "録音中です" : "録音停止中です")
+        VStack(spacing: 4) {
+            Text(formatDuration(recordingDuration))
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(isRecording ? (recordingDuration >= warningDuration ? .orange : .red) : .secondary)
+                .opacity(isRecording ? 1.0 : 0.0)
+                .animation(.easeInOut(duration: 0.3), value: isRecording)
+                .accessibilityLabel("録音時間: \(formatDuration(recordingDuration))")
+                .accessibilityHint(isRecording ? "録音中です" : "録音停止中です")
+            
+            if isRecording && recordingDuration >= warningDuration {
+                Text("もうすぐ制限時間です")
+                    .font(.caption)
+                    .foregroundColor(.orange)
+                    .opacity(isRecording ? 1.0 : 0.0)
+                    .animation(.easeInOut(duration: 0.3), value: isRecording)
+            }
+        }
     }
     
     // MARK: - 操作ボタンビュー
@@ -192,6 +212,12 @@ struct VoiceInputView_v2_1: View {
         // 録音時間のタイマー開始
         recordingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             recordingDuration += 0.1
+            
+            // 制限時間チェック
+            if recordingDuration >= maxRecordingDuration {
+                stopRecording()
+                showTimeLimitAlert = true
+            }
         }
         
         Task {
