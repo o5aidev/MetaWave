@@ -60,8 +60,8 @@ final class TextEmotionAnalyzer {
         var sentimentScore: Float = 0.0
         
         tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .paragraph, scheme: .sentimentScore) { tag, range in
-            if let tag = tag {
-                sentimentScore = tag.rawValue
+            if let tag = tag, let value = Float(tag.rawValue) {
+                sentimentScore = value
             }
             return true
         }
