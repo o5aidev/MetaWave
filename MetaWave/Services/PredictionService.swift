@@ -158,15 +158,15 @@ final class PredictionService: ObservableObject {
             return nil
         }
         
-        var biasCounts: [BiasSignal: Int] = [:]
+        var biasCounts: [String: Int] = [:]
         
         for note in notes {
             // 簡易的なバイアス検出
             if isNegativeBias(note) {
-                biasCounts[.negativeBias, default: 0] += 1
+                biasCounts["negative_bias", default: 0] += 1
             }
             if isConfirmationBias(note, in: notes) {
-                biasCounts[.confirmationBias, default: 0] += 1
+                biasCounts["confirmation_bias", default: 0] += 1
             }
         }
         
