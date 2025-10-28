@@ -144,14 +144,17 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         var audioData = Data()
         let startTime = Date()
         
-        // タップをインストール
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: validFormat) { buffer, _ in
+        // タップをインストール（バッファサイズを2048に増やしてパフォーマンス最適化）
+        inputNode.installTap(onBus: 0, bufferSize: 2048, format: validFormat) { buffer, _ in
             recognitionRequest.append(buffer)
             
-            // 音声データの収集（暗号化用）
-            let audioBuffer = buffer.audioBufferList.pointee.mBuffers
-            let audioBytes = Data(bytes: audioBuffer.mData!, count: Int(audioBuffer.mDataByteSize))
-            audioData.append(audioBytes)
+            // 音声データの収集（暗号化用・オプショナル）
+            // メモリ使用量を削減するため、必要に応じてのみ収集
+            if audioData.count < 10 * 1024 * 1024 { // 10MBまで制限
+                let audioBuffer = buffer.audioBufferList.pointee.mBuffers
+                let audioBytes = Data(bytes: audioBuffer.mData!, count: Int(audioBuffer.mDataByteSize))
+                audioData.append(audioBytes)
+            }
         }
         
         // 音声エンジンの準備と開始
