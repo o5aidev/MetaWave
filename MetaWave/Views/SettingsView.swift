@@ -11,14 +11,20 @@ import CoreData
 struct SettingsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var vault = Vault.shared
+    @StateObject private var notificationService = NotificationService.shared
     @State private var showingKeyDetails = false
     @State private var showingDeleteConfirmation = false
     @State private var showingExportAlert = false
     @State private var exportMessage = ""
+    @State private var dailyReminderTime = Date()
+    @State private var showingNotificationSettings = false
     
     var body: some View {
         NavigationView {
             List {
+                // 通知設定セクション
+                notificationSection
+                
                 // セキュリティセクション
                 securitySection
                 
@@ -54,6 +60,54 @@ struct SettingsView: View {
     }
     
     // MARK: - View Sections
+    
+    private var notificationSection: some View {
+        Section("通知") {
+            // 通知の有効/無効
+            Toggle(isOn: Binding(
+                get: { notificationService.isPermissionGranted },
+                set: { enabled in
+                    if enabled {
+                        Task {
+                            _ = await notificationService.requestNotificationPermission()
+                        }
+                    }
+                }
+            )) {
+                HStack {
+                    Image(systemName: "bell")
+                        .foregroundColor(.blue)
+                    Text("通知を有効にする")
+                }
+            }
+            
+            // 毎日のリマインダー
+            if notificationService.isPermissionGranted {
+                DatePicker("毎日のリマインダー", selection: $dailyReminderTime, displayedComponents: .hourAndMinute)
+                    .onChange(of: dailyReminderTime) { newValue in
+                        Task {
+                            await notificationService.scheduleDailyReminder(time: newValue)
+                        }
+                    }
+                    .font(.subheadline)
+                
+                // 予定済みリマインダー
+                if !notificationService.scheduledReminders.isEmpty {
+                    ForEach(notificationService.scheduledReminders) { reminder in
+                        HStack {
+                            Image(systemName: "bell.fill")
+                                .foregroundColor(.orange)
+                            Text(reminder.title)
+                            Spacer()
+                            Text(reminder.time, style: .time)
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     private var securitySection: some View {
         Section("Security") {
@@ -112,7 +166,7 @@ struct SettingsView: View {
             }
             
             // データエクスポート
-            Button(action: exportData) {
+            NavigationLink(destination: DataExportView(context: viewContext)) {
                 HStack {
                     Image(systemName: "square.and.arrow.up")
                         .foregroundColor(.green)
