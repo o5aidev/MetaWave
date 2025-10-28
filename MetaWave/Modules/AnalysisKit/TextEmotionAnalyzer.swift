@@ -8,8 +8,11 @@
 import Foundation
 import NaturalLanguage
 
-// AnalysisService.swiftで定義されている型を使用
-// (EmotionAnalyzer, EmotionScore は AnalysisService.swift で定義)
+// 型定義（グローバルスコープ）
+struct EmotionScore {
+    let valence: Float    // -1.0 (ネガティブ) ～ +1.0 (ポジティブ)
+    let arousal: Float    // 0.0 (低覚醒) ～ 1.0 (高覚醒)
+}
 
 /// テキスト感情分析実装
 final class TextEmotionAnalyzer {
