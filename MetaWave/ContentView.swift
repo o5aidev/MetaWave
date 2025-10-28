@@ -159,14 +159,9 @@ struct ContentView: View {
             }
             .tag(0)
             
-            // Analysis Tab
+            // Analysis Tab  
             NavigationView {
-                // 分析機能のビューを表示
-                // 注: PatternAnalysisView、PredictionViewはXcodeで手動追加が必要
-                Text("分析機能\n\n以下のビューをXcodeプロジェクトに追加してください:\n- PatternAnalysisView.swift\n- PredictionView.swift")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                    .padding()
+                InsightsView()
             }
             .tabItem {
                 Image(systemName: "brain.head.profile")
