@@ -163,7 +163,7 @@ struct ContentView: View {
             NavigationView {
                 TabView {
                     // 概要
-                    InsightCardsView(context: viewContext)
+                    InsightCardsView()
                         .tabItem {
                             Label("概要", systemImage: "chart.bar.fill")
                         }
