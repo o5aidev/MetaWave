@@ -18,10 +18,13 @@ struct ContentView: View {
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default,
-        fetchBatchSize: 20  // パフォーマンス最適化
+        animation: .default
     )
     private var items: FetchedResults<Item>
+    
+    init() {
+        // フェッチバッチサイズは別途設定
+    }
 
     var body: some View {
         TabView(selection: $selectedTab) {
