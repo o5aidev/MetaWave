@@ -27,12 +27,11 @@ final class PatternAnalysisService: ObservableObject {
     
     func analyzeHourlyPatterns(completion: @escaping ([HourlyPattern]) -> Void) {
         Task {
-            let request: NSFetchRequest<Note> = Note.fetchRequest()
-            request.predicate = NSPredicate(format: "contentText != nil")
+            let request: NSFetchRequest<Item> = Item.fetchRequest()
             
             do {
-                let notes = try context.fetch(request)
-                let patterns = calculateHourlyPatterns(from: notes)
+                let items = try context.fetch(request)
+                let patterns = calculateHourlyPatterns(fromItems: items)
                 
                 await MainActor.run {
                     self.hourlyPatterns = patterns
@@ -78,16 +77,48 @@ final class PatternAnalysisService: ObservableObject {
         }
     }
     
+    private func calculateHourlyPatterns(fromItems items: [Item]) -> [HourlyPattern] {
+        var patterns: [Int: (count: Int, totalValence: Float, totalArousal: Float)] = [:]
+        
+        for item in items {
+            guard let timestamp = item.timestamp else { continue }
+            
+            let hour = Calendar.current.component(.hour, from: timestamp)
+            
+            if patterns[hour] == nil {
+                patterns[hour] = (0, 0.0, 0.0)
+            }
+            
+            patterns[hour]?.count += 1
+            // Itemには感情データがないので、デフォルト値を使用
+            patterns[hour]?.totalValence += 0.0
+            patterns[hour]?.totalArousal += 0.5
+        }
+        
+        return (0..<24).map { hour in
+            let data = patterns[hour] ?? (0, 0.0, 0.0)
+            let count = data.count
+            let avgValence = count > 0 ? data.totalValence / Float(count) : 0.0
+            let avgArousal = count > 0 ? data.totalArousal / Float(count) : 0.0
+            
+            return HourlyPattern(
+                hour: hour,
+                noteCount: count,
+                averageValence: avgValence,
+                averageArousal: avgArousal
+            )
+        }
+    }
+    
     // MARK: - 週間パターン分析
     
     func analyzeWeeklyPatterns(completion: @escaping ([WeeklyPattern]) -> Void) {
         Task {
-            let request: NSFetchRequest<Note> = Note.fetchRequest()
-            request.predicate = NSPredicate(format: "contentText != nil")
+            let request: NSFetchRequest<Item> = Item.fetchRequest()
             
             do {
-                let notes = try context.fetch(request)
-                let patterns = calculateWeeklyPatterns(from: notes)
+                let items = try context.fetch(request)
+                let patterns = calculateWeeklyPatterns(fromItems: items)
                 
                 await MainActor.run {
                     self.weeklyPatterns = patterns
@@ -116,6 +147,39 @@ final class PatternAnalysisService: ObservableObject {
             patterns[weekday]?.count += 1
             patterns[weekday]?.totalValence += emotionScore?.valence ?? 0.0
             patterns[weekday]?.totalArousal += emotionScore?.arousal ?? 0.0
+        }
+        
+        return (1...7).map { weekday in
+            let data = patterns[weekday] ?? (0, 0.0, 0.0)
+            let count = data.count
+            let avgValence = count > 0 ? data.totalValence / Float(count) : 0.0
+            let avgArousal = count > 0 ? data.totalArousal / Float(count) : 0.0
+            
+            return WeeklyPattern(
+                weekday: weekday,
+                noteCount: count,
+                averageValence: avgValence,
+                averageArousal: avgArousal
+            )
+        }
+    }
+    
+    private func calculateWeeklyPatterns(fromItems items: [Item]) -> [WeeklyPattern] {
+        var patterns: [Int: (count: Int, totalValence: Float, totalArousal: Float)] = [:]
+        
+        for item in items {
+            guard let timestamp = item.timestamp else { continue }
+            
+            let weekday = Calendar.current.component(.weekday, from: timestamp)
+            
+            if patterns[weekday] == nil {
+                patterns[weekday] = (0, 0.0, 0.0)
+            }
+            
+            patterns[weekday]?.count += 1
+            // Itemには感情データがないので、デフォルト値を使用
+            patterns[weekday]?.totalValence += 0.0
+            patterns[weekday]?.totalArousal += 0.5
         }
         
         return (1...7).map { weekday in
@@ -236,26 +300,25 @@ final class PatternAnalysisService: ObservableObject {
     // MARK: - 統計情報
     
     func getPatternSummary() -> PatternSummary {
-        let recentNotes = try? context.fetch(Note.fetchRequest())
-        let notes = recentNotes ?? []
+        let recentItems = try? context.fetch(Item.fetchRequest())
+        let items = recentItems ?? []
         
-        let totalNotes = notes.count
-        let averageValence = notes.compactMap { $0.getEmotionScore()?.valence }
-            .reduce(0.0, +) / Float(max(1, notes.count))
-        let averageArousal = notes.compactMap { $0.getEmotionScore()?.arousal }
-            .reduce(0.0, +) / Float(max(1, notes.count))
+        let totalNotes = items.count
+        // Itemには感情データがないのでデフォルト値
+        let averageValence: Float = 0.0
+        let averageArousal: Float = 0.5
         
         // 最もアクティブな時間帯
-        let hourlyNotes = Dictionary(grouping: notes) { note in
-            Calendar.current.component(.hour, from: note.createdAt ?? Date())
+        let hourlyItems = Dictionary(grouping: items) { item in
+            Calendar.current.component(.hour, from: item.timestamp ?? Date())
         }
-        let mostActiveHour = hourlyNotes.max(by: { $0.value.count < $1.value.count })?.key ?? 0
+        let mostActiveHour = hourlyItems.max(by: { $0.value.count < $1.value.count })?.key ?? 0
         
         // 最もアクティブな曜日
-        let weeklyNotes = Dictionary(grouping: notes) { note in
-            Calendar.current.component(.weekday, from: note.createdAt ?? Date())
+        let weeklyItems = Dictionary(grouping: items) { item in
+            Calendar.current.component(.weekday, from: item.timestamp ?? Date())
         }
-        let mostActiveDay = weeklyNotes.max(by: { $0.value.count < $1.value.count })?.key ?? 1
+        let mostActiveDay = weeklyItems.max(by: { $0.value.count < $1.value.count })?.key ?? 1
         
         return PatternSummary(
             totalNotes: totalNotes,

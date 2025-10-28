@@ -177,7 +177,7 @@ struct ContentView: View {
                     // 予測分析
                     PredictionView(context: viewContext)
                         .tabItem {
-                            Label("予測", systemImage: "crystal.ball")
+                            Label("予測", systemImage: "chart.bar.xaxis")
                         }
                 }
             }
