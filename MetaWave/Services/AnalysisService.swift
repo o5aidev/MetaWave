@@ -344,3 +344,19 @@ struct BiorhythmInsightPayload: Codable {
     let message: String
     let recommendation: String
 }
+
+// MARK: - Loop Cluster
+
+struct LoopCluster: Identifiable {
+    let id: UUID
+    let topic: String
+    let noteIDs: [UUID]
+    let strength: Float
+    
+    init(topic: String, noteIDs: [UUID], strength: Float) {
+        self.id = UUID()
+        self.topic = topic
+        self.noteIDs = noteIDs
+        self.strength = strength
+    }
+}
