@@ -172,16 +172,6 @@ struct ContentView: View {
                 Text("Settings")
             }
             .tag(2)
-            
-            // Sync & Sharing Tab
-            NavigationView {
-                SyncStatusView()
-            }
-            .tabItem {
-                Image(systemName: "icloud")
-                Text("同期・共有")
-            }
-            .tag(3)
         }
     }
 
@@ -195,12 +185,7 @@ struct ContentView: View {
             newItem.title = "Sample Item" // titleフィールドを設定
             newItem.note = "This is a sample note for testing" // noteフィールドも設定
 
-            do {
-                try viewContext.save()
-            } catch {
-                // 失敗してもクラッシュさせずログ
-                print("[CoreData] Save error:", error.localizedDescription)
-            }
+            try? viewContext.save()
         }
     }
 
