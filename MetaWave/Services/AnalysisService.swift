@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreData
+import SwiftUI
+import Combine
 
 /// 分析サービス統合クラス
 final class AnalysisService: ObservableObject {
