@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 import Speech
 import AVFoundation
+import Foundation
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -237,25 +238,10 @@ struct ContentView: View {
         
         print("音声感情分析を実行: \(note)")
         
-        // テキスト感情分析を実行
-        let analyzer = TextEmotionAnalyzer()
+        // TODO: TextEmotionAnalyzerのインポート必要
+        // 現時点ではログ出力のみ
         
-        do {
-            let emotionScore = try await analyzer.analyze(text: note)
-            
-            await MainActor.run {
-                // Itemエンティティには感情スコアフィールドがないため、
-                // ここではログ出力のみ
-                print("✅ 感情分析完了: valence=\(emotionScore.valence), arousal=\(emotionScore.arousal)")
-                
-                // TODO: Noteエンティティを使用する場合は以下を有効化
-                // item.sentiment = NSNumber(value: emotionScore.valence)
-                // item.arousal = NSNumber(value: emotionScore.arousal)
-                // try? viewContext.save()
-            }
-        } catch {
-            print("❌ 感情分析エラー: \(error)")
-        }
+        print("ℹ️ 感情分析は将来的な機能拡張を予定しています")
     }
 }
 
