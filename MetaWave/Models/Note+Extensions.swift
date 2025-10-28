@@ -28,9 +28,10 @@ extension Note {
     
     /// 感情スコアを取得
     func getEmotionScore() -> EmotionScore? {
-        guard let sentiment = self.sentiment,
-              let arousal = self.arousal else { return nil }
-        return EmotionScore(valence: sentiment, arousal: arousal)
+        // sentimentとarousalはFloat型なので直接使用
+        let sentValue = self.sentiment ?? 0.0
+        let arousValue = self.arousal ?? 0.0
+        return EmotionScore(valence: sentValue, arousal: arousValue)
     }
     
     /// タグ配列を設定
@@ -58,10 +59,13 @@ extension Note {
             return [:]
         }
         
-        return Dictionary(uniqueKeysWithValues: dict.compactMap { key, value in
-            guard let biasSignal = BiasSignal(rawValue: key) else { return nil }
-            return (biasSignal, value)
-        })
+        var result: [BiasSignal: Float] = [:]
+        for (key, value) in dict {
+            if let biasSignal = BiasSignal(rawValue: key) {
+                result[biasSignal] = value
+            }
+        }
+        return result
     }
     
     /// 新しいNoteを作成
