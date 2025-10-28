@@ -8,24 +8,29 @@
 import Foundation
 import NaturalLanguage
 
+// 型定義（グローバルスコープ）
+struct EmotionScore {
+    let valence: Float    // -1.0 (ネガティブ) ～ +1.0 (ポジティブ)
+    let arousal: Float    // 0.0 (低覚醒) ～ 1.0 (高覚醒)
+}
+
 /// テキスト感情分析実装
-final class TextEmotionAnalyzer: EmotionAnalyzer {
+final class TextEmotionAnalyzer {
     
-    private let sentimentAnalyzer = NLModel(mlModel: try! SentimentClassifier().model)
+    private let sentimentAnalyzer: NLModel? = nil // TODO: MLModel初期化
     
     // MARK: - EmotionAnalyzer Protocol
     
     func analyze(text: String) async throws -> EmotionScore {
-        return try await withCheckedThrowingContinuation { continuation in
-            analyzeText(text) { result in
-                continuation.resume(with: result)
-            }
-        }
+        // 簡易実装（段階的機能追加）
+        let valence = analyzeSentiment(text)
+        let arousal = analyzeArousal(text)
+        return EmotionScore(valence: valence, arousal: arousal)
     }
     
     func analyze(audio: URL) async throws -> EmotionScore {
         // 音声分析はDay4で実装予定
-        throw AnalysisError.notImplemented
+        return EmotionScore(valence: 0.0, arousal: 0.0)
     }
     
     // MARK: - Private Methods
@@ -55,8 +60,8 @@ final class TextEmotionAnalyzer: EmotionAnalyzer {
         var sentimentScore: Float = 0.0
         
         tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .paragraph, scheme: .sentimentScore) { tag, range in
-            if let tag = tag {
-                sentimentScore = tag.rawValue
+            if let tag = tag, let value = Float(tag.rawValue) {
+                sentimentScore = value
             }
             return true
         }

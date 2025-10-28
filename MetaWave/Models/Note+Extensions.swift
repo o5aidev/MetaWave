@@ -8,6 +8,9 @@
 import Foundation
 import CoreData
 
+// EmotionScore型はTextEmotionAnalyzer.swiftで定義されています
+// BiasSignal型はAnalysisService.swiftで定義されています
+
 extension Note {
     
     /// 入力モダリティ
@@ -25,9 +28,10 @@ extension Note {
     
     /// 感情スコアを取得
     func getEmotionScore() -> EmotionScore? {
-        guard let sentiment = self.sentiment,
-              let arousal = self.arousal else { return nil }
-        return EmotionScore(valence: sentiment, arousal: arousal)
+        // sentimentとarousalはFloat型なので直接使用
+        let sentValue = self.sentiment ?? 0.0
+        let arousValue = self.arousal ?? 0.0
+        return EmotionScore(valence: sentValue, arousal: arousValue)
     }
     
     /// タグ配列を設定
@@ -42,23 +46,19 @@ extension Note {
     }
     
     /// バイアス信号を設定
-    func setBiasSignals(_ signals: [BiasSignal: Float]) {
-        let data = try? JSONEncoder().encode(signals.mapKeys { $0.rawValue })
+    func setBiasSignals(_ signals: [String: Float]) {
+        let data = try? JSONEncoder().encode(signals)
         self.biasSignals = data?.base64EncodedString()
     }
     
     /// バイアス信号を取得
-    func getBiasSignals() -> [BiasSignal: Float] {
+    func getBiasSignals() -> [String: Float] {
         guard let biasSignals = self.biasSignals,
               let data = Data(base64Encoded: biasSignals),
               let dict = try? JSONDecoder().decode([String: Float].self, from: data) else {
             return [:]
         }
-        
-        return Dictionary(uniqueKeysWithValues: dict.compactMap { key, value in
-            guard let biasSignal = BiasSignal(rawValue: key) else { return nil }
-            return (biasSignal, value)
-        })
+        return dict
     }
     
     /// 新しいNoteを作成
@@ -85,8 +85,3 @@ extension Note {
 
 // MARK: - Dictionary Extension
 
-extension Dictionary {
-    func mapKeys<T>(_ transform: (Key) throws -> T) rethrows -> [T: Value] {
-        return Dictionary(uniqueKeysWithValues: try map { (try transform($0), $1) })
-    }
-}

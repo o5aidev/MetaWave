@@ -8,9 +8,9 @@
 import Foundation
 import CoreData
 import SwiftUI
+import Combine
 
 /// 時間パターン分析サービス
-@MainActor
 final class PatternAnalysisService: ObservableObject {
     
     private let context: NSManagedObjectContext

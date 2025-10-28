@@ -8,9 +8,9 @@
 import Foundation
 import CoreData
 import SwiftUI
+import Combine
 
 /// 予測機能サービス
-@MainActor
 final class PredictionService: ObservableObject {
     
     private let context: NSManagedObjectContext
@@ -158,26 +158,27 @@ final class PredictionService: ObservableObject {
             return nil
         }
         
-        var biasCounts: [BiasSignal: Int] = [:]
+        var biasCounts: [String: Int] = [:]
         
         for note in notes {
             // 簡易的なバイアス検出
             if isNegativeBias(note) {
-                biasCounts[.negativeBias, default: 0] += 1
+                biasCounts["negative_bias", default: 0] += 1
             }
             if isConfirmationBias(note, in: notes) {
-                biasCounts[.confirmationBias, default: 0] += 1
+                biasCounts["confirmation_bias", default: 0] += 1
             }
         }
         
         let totalBiasCount = biasCounts.values.reduce(0, +)
         let biasRatio = Float(totalBiasCount) / Float(notes.count)
         
-        if biasRatio > 0.3, let dominantBias = biasCounts.max(by: { $0.value < $1.value })?.key {
+        if biasRatio > 0.3, let dominantBiasKey = biasCounts.max(by: { $0.value < $1.value })?.key {
+            let displayName = dominantBiasKey.replacingOccurrences(of: "_", with: " ").capitalized
             return Prediction(
                 type: .biasDetection,
                 title: "認知バイアス傾向",
-                message: "\(dominantBias.displayName)の傾向が見られます。異なる視点から考える機会を増やすことをお勧めします。",
+                message: "\(displayName)の傾向が見られます。異なる視点から考える機会を増やすことをお勧めします。",
                 confidence: min(0.8, biasRatio),
                 impact: .high,
                 timeframe: "継続中"

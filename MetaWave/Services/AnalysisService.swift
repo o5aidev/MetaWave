@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreData
+import SwiftUI
+import Combine
 
 /// 分析サービス統合クラス
 final class AnalysisService: ObservableObject {
@@ -343,4 +345,55 @@ struct BiorhythmInsightPayload: Codable {
     let type: String
     let message: String
     let recommendation: String
+}
+
+// MARK: - Loop Cluster
+
+struct LoopCluster: Identifiable {
+    let id: UUID
+    let topic: String
+    let noteIDs: [UUID]
+    let strength: Float
+    
+    init(topic: String, noteIDs: [UUID], strength: Float) {
+        self.id = UUID()
+        self.topic = topic
+        self.noteIDs = noteIDs
+        self.strength = strength
+    }
+}
+
+// MARK: - Support Types (プロトコルとスコア定義)
+
+struct EmotionScore {
+    let valence: Float    // -1.0 (ネガティブ) ～ +1.0 (ポジティブ)
+    let arousal: Float    // 0.0 (低覚醒) ～ 1.0 (高覚醒)
+}
+
+protocol EmotionAnalyzer {
+    func analyze(audio: URL) async throws -> EmotionScore
+    func analyze(text: String) async throws -> EmotionScore
+}
+
+protocol LoopDetector {
+    func cluster(notes: [Note]) async throws -> [LoopCluster]
+}
+
+enum BiasSignal: String, CaseIterable {
+    case confirmationBias = "confirmation"
+    case availabilityBias = "availability"
+    case anchoringBias = "anchoring"
+    case lossAversion = "loss_aversion"
+    case sunkCost = "sunk_cost"
+}
+
+protocol BiasSignalDetector {
+    func evaluate(notes: [Note]) async -> [BiasSignal: Float]
+}
+
+struct SentimentClassifier {
+    // プレースホルダー実装
+    init(mlModel: URL) {
+        // MLモデルの読み込み（実装は後で）
+    }
 }
