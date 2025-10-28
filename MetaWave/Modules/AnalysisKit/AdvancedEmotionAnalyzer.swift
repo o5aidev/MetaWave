@@ -8,11 +8,14 @@
 import Foundation
 import NaturalLanguage
 
+// AnalysisService.swiftで定義されている型を使用
+// (EmotionAnalyzer, EmotionScore は AnalysisService.swift で定義)
+
 /// 高度な感情分析実装
-final class AdvancedEmotionAnalyzer: EmotionAnalyzer {
+final class AdvancedEmotionAnalyzer {
     
     private let baseAnalyzer: TextEmotionAnalyzer
-    private let sentimentAnalyzer = NLModel(mlModel: try! SentimentClassifier().model)
+    private let sentimentAnalyzer: NLModel? = nil // TODO: MLModel初期化
     
     init(baseAnalyzer: TextEmotionAnalyzer = TextEmotionAnalyzer()) {
         self.baseAnalyzer = baseAnalyzer
