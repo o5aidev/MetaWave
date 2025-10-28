@@ -229,9 +229,33 @@ struct ContentView: View {
     
     // MARK: - 音声感情分析
     private func analyzeVoiceEmotion(for item: Item) async {
-        // 音声感情分析の実装（将来の拡張用）
-        // 現在はテキスト分析のみ実行
-        print("音声感情分析を実行: \(item.note ?? "")")
+        // テキスト内容を取得
+        guard let note = item.note, !note.isEmpty else {
+            print("⚠️ ノートが空です")
+            return
+        }
+        
+        print("音声感情分析を実行: \(note)")
+        
+        // テキスト感情分析を実行
+        let analyzer = TextEmotionAnalyzer()
+        
+        do {
+            let emotionScore = try await analyzer.analyze(text: note)
+            
+            await MainActor.run {
+                // Itemエンティティには感情スコアフィールドがないため、
+                // ここではログ出力のみ
+                print("✅ 感情分析完了: valence=\(emotionScore.valence), arousal=\(emotionScore.arousal)")
+                
+                // TODO: Noteエンティティを使用する場合は以下を有効化
+                // item.sentiment = NSNumber(value: emotionScore.valence)
+                // item.arousal = NSNumber(value: emotionScore.arousal)
+                // try? viewContext.save()
+            }
+        } catch {
+            print("❌ 感情分析エラー: \(error)")
+        }
     }
 }
 
