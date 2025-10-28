@@ -46,26 +46,19 @@ extension Note {
     }
     
     /// バイアス信号を設定
-    func setBiasSignals(_ signals: [BiasSignal: Float]) {
-        let data = try? JSONEncoder().encode(signals.mapKeys { $0.rawValue })
+    func setBiasSignals(_ signals: [String: Float]) {
+        let data = try? JSONEncoder().encode(signals)
         self.biasSignals = data?.base64EncodedString()
     }
     
     /// バイアス信号を取得
-    func getBiasSignals() -> [BiasSignal: Float] {
+    func getBiasSignals() -> [String: Float] {
         guard let biasSignals = self.biasSignals,
               let data = Data(base64Encoded: biasSignals),
               let dict = try? JSONDecoder().decode([String: Float].self, from: data) else {
             return [:]
         }
-        
-        var result: [BiasSignal: Float] = [:]
-        for (key, value) in dict {
-            if let biasSignal = BiasSignal(rawValue: key) {
-                result[biasSignal] = value
-            }
-        }
-        return result
+        return dict
     }
     
     /// 新しいNoteを作成
@@ -92,8 +85,3 @@ extension Note {
 
 // MARK: - Dictionary Extension
 
-extension Dictionary {
-    func mapKeys<T>(_ transform: (Key) throws -> T) rethrows -> [T: Value] {
-        return Dictionary(uniqueKeysWithValues: try map { (try transform($0), $1) })
-    }
-}
