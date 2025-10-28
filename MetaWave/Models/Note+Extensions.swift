@@ -8,11 +8,8 @@
 import Foundation
 import CoreData
 
-// EmotionScore型定義（TextEmotionAnalyzer.swiftと重複）
-struct EmotionScore {
-    let valence: Float
-    let arousal: Float
-}
+// EmotionScore型はTextEmotionAnalyzer.swiftで定義されています
+// BiasSignal型はAnalysisService.swiftで定義されています
 
 extension Note {
     
