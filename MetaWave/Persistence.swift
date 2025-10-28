@@ -56,6 +56,10 @@ struct PersistenceController {
         let ctx = container.viewContext
         ctx.automaticallyMergesChangesFromParent = true
         ctx.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
+        // パフォーマンス最適化
+        ctx.stalenessInterval = 0.0 // 常に最新データ
+        ctx.undoManager = nil // メモリ節約
 
         self.container = container
     }
@@ -64,6 +68,16 @@ struct PersistenceController {
     func newBackgroundContext() -> NSManagedObjectContext {
         let ctx = container.newBackgroundContext()
         ctx.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        ctx.undoManager = nil // バックグラウンド処理では不要
         return ctx
+    }
+    
+    // MARK: - バッチフェッチの最適化
+    func fetchItemsWithLimit(_ limit: Int = 50) -> NSFetchRequest<Item> {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        request.fetchLimit = limit
+        request.fetchBatchSize = 20
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.timestamp, ascending: false)]
+        return request
     }
 }

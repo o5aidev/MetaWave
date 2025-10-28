@@ -18,7 +18,8 @@ struct ContentView: View {
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default
+        animation: .default,
+        fetchBatchSize: 20  // パフォーマンス最適化
     )
     private var items: FetchedResults<Item>
 
@@ -111,6 +112,7 @@ struct ContentView: View {
                             }
                         }
                         .onDelete(perform: deleteItems)
+                        .listRowSeparator(.hidden)  // UI最適化
                     }
                 }
             }
