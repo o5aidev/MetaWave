@@ -155,13 +155,31 @@ struct ContentView: View {
             }
             .tag(0)
             
-            // Insights Tab
+            // Analysis Tab (Insights renamed to Analysis)
             NavigationView {
-                InsightsView()
+                TabView {
+                    // 概要
+                    InsightCardsView(context: viewContext)
+                        .tabItem {
+                            Label("概要", systemImage: "chart.bar.fill")
+                        }
+                    
+                    // パターン分析
+                    PatternAnalysisView(context: viewContext)
+                        .tabItem {
+                            Label("パターン", systemImage: "chart.line.uptrend.xyaxis")
+                        }
+                    
+                    // 予測分析
+                    PredictionView(context: viewContext)
+                        .tabItem {
+                            Label("予測", systemImage: "crystal.ball")
+                        }
+                }
             }
             .tabItem {
                 Image(systemName: "brain.head.profile")
-                Text("Insights")
+                Text("分析")
             }
             .tag(1)
             
