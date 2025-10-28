@@ -153,8 +153,18 @@
 			children = (
 				7EEA703C2EF04BAB9F334166 /* AdvancedEmotionAnalyzer.swift */,
 				47DE8860A4B74BE893635B3D /* TextEmotionAnalyzer.swift */,
+				84D041584823463DB9170D80 /* BiasDetector.swift */,
+				57AD779D5B7241B98CA63D10 /* TextLoopDetector.swift */,
 			);
 			path = AnalysisKit;
+			sourceTree = "<group>";
+		};
+		0396EDC1FEF242109F03EA90 /* AnalysisServices */ = {
+			isa = PBXGroup;
+			children = (
+				0396EDC1FEF242109F03EA8F /* AnalysisServices.swift */,
+			);
+			path = "Services/AnalysisServices";
 			sourceTree = "<group>";
 		};
 		014DA1BA2EA6A8D7009139E4 = {
