@@ -58,7 +58,7 @@ struct PredictionView: View {
     
     private var headerView: some View {
         VStack(spacing: 8) {
-            Image(systemName: "crystal.ball")
+            Image(systemName: "chart.bar.xaxis")
                 .font(.system(size: 60))
                 .foregroundColor(.purple)
             

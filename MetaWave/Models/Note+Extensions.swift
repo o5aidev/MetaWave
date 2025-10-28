@@ -29,8 +29,8 @@ extension Note {
     /// 感情スコアを取得
     func getEmotionScore() -> EmotionScore? {
         // sentimentとarousalはFloat型なので直接使用
-        let sentValue = self.sentiment ?? 0.0
-        let arousValue = self.arousal ?? 0.0
+        let sentValue = self.sentiment
+        let arousValue = self.arousal
         return EmotionScore(valence: sentValue, arousal: arousValue)
     }
     
