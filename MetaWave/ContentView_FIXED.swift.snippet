@@ -1,0 +1,31 @@
+// MARK: - Analysis Tab Fixed Version
+// このコードで ContentView.swift 161行目付近を置き換えてください
+
+// Analysis Tab (Insights renamed to Analysis)
+NavigationView {
+    TabView {
+        // 概要
+        InsightCardsView(context: viewContext)
+            .tabItem {
+                Label("概要", systemImage: "chart.bar.fill")
+            }
+        
+        // パターン分析
+        PatternAnalysisView(context: viewContext)
+            .tabItem {
+                Label("パターン", systemImage: "chart.line.uptrend.xyaxis")
+            }
+        
+        // 予測分析
+        PredictionView(context: viewContext)
+            .tabItem {
+                Label("予測", systemImage: "crystal.ball")
+            }
+    }
+}
+.tabItem {
+    Image(systemName: "brain.head.profile")
+    Text("分析")
+}
+.tag(1)
+
