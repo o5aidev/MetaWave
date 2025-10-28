@@ -172,28 +172,6 @@ struct ContentView: View {
                 Text("Settings")
             }
             .tag(2)
-            
-            // Sharing Tab
-            NavigationView {
-                // SharingView(persistentContainer: PersistenceController.shared.container, vault: Vault.shared)
-                VStack {
-                    Text("共有機能")
-                        .font(.largeTitle)
-                        .padding()
-                    
-                    Text("v2.2で実装予定")
-                        .foregroundColor(.secondary)
-                        .padding()
-                    
-                    Spacer()
-                }
-                .navigationTitle("共有")
-            }
-            .tabItem {
-                Image(systemName: "square.and.arrow.up")
-                Text("Sharing")
-            }
-            .tag(3)
         }
     }
 
@@ -207,12 +185,7 @@ struct ContentView: View {
             newItem.title = "Sample Item" // titleフィールドを設定
             newItem.note = "This is a sample note for testing" // noteフィールドも設定
 
-            do {
-                try viewContext.save()
-            } catch {
-                // 失敗してもクラッシュさせずログ
-                print("[CoreData] Save error:", error.localizedDescription)
-            }
+            try? viewContext.save()
         }
     }
 

@@ -120,7 +120,6 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         // 音声認識の感度を上げる設定
         if #available(iOS 13.0, *) {
             recognitionRequest.contextualStrings = []
-            recognitionRequest.interactionIdentifier = UUID().uuidString
         }
         
         // シミュレーター環境のチェック
@@ -156,10 +155,10 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         }
         
         // 音声エンジンの準備と開始
+        audioEngine.prepare()
+        print("✅ 音声エンジン準備完了")
+        
         do {
-            audioEngine.prepare()
-            print("✅ 音声エンジン準備完了")
-            
             try audioEngine.start()
             print("✅ 音声エンジン開始")
         } catch {
@@ -313,15 +312,9 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         // メモリ効率を考慮した復号化
         guard !encryptedData.isEmpty else { return encryptedData }
         
-        do {
-            // DataをEncryptedBlobに変換（簡易版：元データをそのまま返す）
-            // 実際の実装では、ciphertext、nonce、tagを分離する必要がある
-            return encryptedData
-        } catch {
-            print("⚠️ 音声データの復号化に失敗: \(error.localizedDescription)")
-            // 復号化に失敗した場合は元データを返す
-            return encryptedData
-        }
+        // DataをEncryptedBlobに変換（簡易版：元データをそのまま返す）
+        // 実際の実装では、ciphertext、nonce、tagを分離する必要がある
+        return encryptedData
     }
 }
 
