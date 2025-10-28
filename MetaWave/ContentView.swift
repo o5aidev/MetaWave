@@ -238,10 +238,88 @@ struct ContentView: View {
         
         print("音声感情分析を実行: \(note)")
         
-        // TODO: TextEmotionAnalyzerのインポート必要
-        // 現時点ではログ出力のみ
+        // 簡易的な感情分析を実行
+        let valence = calculateSimpleValence(text: note)
+        let arousal = calculateSimpleArousal(text: note)
         
-        print("ℹ️ 感情分析は将来的な機能拡張を予定しています")
+        print("✅ 感情分析完了: valence=\(valence), arousal=\(arousal)")
+        
+        // 感情の解釈
+        let emotionLabel = interpretEmotion(valence: valence, arousal: arousal)
+        print("📊 感情状態: \(emotionLabel)")
+    }
+    
+    // MARK: - 簡易感情分析
+    private func calculateSimpleValence(text: String) -> Float {
+        let positiveWords = ["楽しい", "嬉しい", "幸せ", "良い", "好き", "最高", "素晴らしい", "良い", "great", "good", "happy", "love"]
+        let negativeWords = ["悲しい", "辛い", "苦しい", "嫌い", "悪い", "最悪", "ダメ", "bad", "sad", "hate", "angry"]
+        
+        let lowerText = text.lowercased()
+        var positiveCount = 0
+        var negativeCount = 0
+        
+        for word in positiveWords {
+            if lowerText.contains(word) {
+                positiveCount += 1
+            }
+        }
+        
+        for word in negativeWords {
+            if lowerText.contains(word) {
+                negativeCount += 1
+            }
+        }
+        
+        let total = positiveCount + negativeCount
+        if total == 0 {
+            return 0.0
+        }
+        
+        return Float(positiveCount - negativeCount) / Float(total)
+    }
+    
+    private func calculateSimpleArousal(text: String) -> Float {
+        let highArousalWords = ["興奮", "ワクワク", "ドキドキ", "驚いた", "驚き", "excited", "thrilled", "wow", "amazing"]
+        let lowArousalWords = ["疲れた", "眠い", "穏やか", "静か", "tired", "sleepy", "calm"]
+        
+        let lowerText = text.lowercased()
+        var highCount = 0
+        var lowCount = 0
+        
+        for word in highArousalWords {
+            if lowerText.contains(word) {
+                highCount += 1
+            }
+        }
+        
+        for word in lowArousalWords {
+            if lowerText.contains(word) {
+                lowCount += 1
+            }
+        }
+        
+        let total = highCount + lowCount
+        if total == 0 {
+            return 0.5 // デフォルトは中間
+        }
+        
+        return Float(highCount) / Float(total)
+    }
+    
+    private func interpretEmotion(valence: Float, arousal: Float) -> String {
+        if valence > 0.3 && arousal > 0.6 {
+            return "興奮（高ポジティブ）"
+        } else if valence > 0.3 && arousal < 0.4 {
+            return "穏やか（ポジティブ）"
+        } else if valence < -0.3 && arousal > 0.6 {
+            return "イライラ（高ネガティブ）"
+        } else if valence < -0.3 && arousal < 0.4 {
+            return "落ち込み（ネガティブ）"
+        } else if arousal > 0.6 {
+            return "高覚醒（中性）"
+        } else {
+            return "安定（中性）"
+        }
     }
 }
 
