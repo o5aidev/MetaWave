@@ -27,6 +27,20 @@
 		0180F3592EAD16DD0070A38B /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F35A2EAD16DD0070A38B /* SpeechRecognitionService.swift */; };
 		0180F35B2EAD16DD0070A38B /* VoiceInputView_v2.1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F3582EAD16DD0070A38B /* VoiceInputView_v2.1.swift */; };
 		0180F35C2EAD16DD0070A38B /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F35A2EAD16DD0070A38B /* SpeechRecognitionService.swift */; };
+		0228B4B540444BB38D5EA755 /* InsightCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672C6C6CA19941FBB796ACB3 /* InsightCards.swift */; };
+		0228B4B640444BB38D5EA756 /* InsightCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672C6C6CA19941FBB796ACB3 /* InsightCards.swift */; };
+		059D332E3535454690230594 /* PatternAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068D190205144781BE388E14 /* PatternAnalysisView.swift */; };
+		059D332F3535454690230595 /* PatternAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068D190205144781BE388E14 /* PatternAnalysisView.swift */; };
+		5A73BCFD5E554E63B84686E5 /* PredictionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BC28343C0F40A793AC540A /* PredictionView.swift */; };
+		5A73BCFE5E554E63B84686E6 /* PredictionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BC28343C0F40A793AC540A /* PredictionView.swift */; };
+		89E4D57B04FF470CAA11AA28 /* PatternAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B960CA20F441E38F713DF9 /* PatternAnalysisService.swift */; };
+		89E4D57C04FF470CAA11AA29 /* PatternAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B960CA20F441E38F713DF9 /* PatternAnalysisService.swift */; };
+		DAE08CA030BF4F94B4AF40A2 /* PredictionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96B8DD2814545198EC6B407 /* PredictionService.swift */; };
+		DAE08CA130BF4F94B4AF40A3 /* PredictionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96B8DD2814545198EC6B407 /* PredictionService.swift */; };
+		9D8DAFBFF77B4DEEA628EA91 /* AdvancedEmotionAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA703C2EF04BAB9F334166 /* AdvancedEmotionAnalyzer.swift */; };
+		9D8DAFC0F77B4DEEA628EA92 /* AdvancedEmotionAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA703C2EF04BAB9F334166 /* AdvancedEmotionAnalyzer.swift */; };
+		F0B8B0C86741449D81DEA4B3 /* TextEmotionAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DE8860A4B74BE893635B3D /* TextEmotionAnalyzer.swift */; };
+		F0B8B0C96741449D81DEA4B4 /* TextEmotionAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DE8860A4B74BE893635B3D /* TextEmotionAnalyzer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +59,14 @@
 		0180F3562EA7DC38007086B7 /* MetaWave Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MetaWave Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0180F3582EAD16DD0070A38B /* VoiceInputView_v2.1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceInputView_v2.1.swift; sourceTree = "<group>"; };
 		0180F35A2EAD16DD0070A38B /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
+		672C6C6CA19941FBB796ACB3 /* InsightCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightCards.swift; sourceTree = "<group>"; };
+		068D190205144781BE388E14 /* PatternAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternAnalysisView.swift; sourceTree = "<group>"; };
+		64BC28343C0F40A793AC540A /* PredictionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionView.swift; sourceTree = "<group>"; };
+		92707EEBE43948D8919CA223 /* AnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisService.swift; sourceTree = "<group>"; };
+		E6B960CA20F441E38F713DF9 /* PatternAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternAnalysisService.swift; sourceTree = "<group>"; };
+		C96B8DD2814545198EC6B407 /* PredictionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionService.swift; sourceTree = "<group>"; };
+		7EEA703C2EF04BAB9F334166 /* AdvancedEmotionAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedEmotionAnalyzer.swift; sourceTree = "<group>"; };
+		47DE8860A4B74BE893635B3D /* TextEmotionAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEmotionAnalyzer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +114,9 @@
 			isa = PBXGroup;
 			children = (
 				0180F3582EAD16DD0070A38B /* VoiceInputView_v2.1.swift */,
+				672C6C6CA19941FBB796ACB3 /* InsightCards.swift */,
+				068D190205144781BE388E14 /* PatternAnalysisView.swift */,
+				64BC28343C0F40A793AC540A /* PredictionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -100,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				014258472EAA93B20016E590 /* InputKit */,
+				DA3383C5967A4380B1ADDF16 /* AnalysisKit */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -110,6 +136,25 @@
 				0180F35A2EAD16DD0070A38B /* SpeechRecognitionService.swift */,
 			);
 			path = InputKit;
+			sourceTree = "<group>";
+		};
+		2465EEAD908E41BF9CF9FB65 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				92707EEBE43948D8919CA223 /* AnalysisService.swift */,
+				E6B960CA20F441E38F713DF9 /* PatternAnalysisService.swift */,
+				C96B8DD2814545198EC6B407 /* PredictionService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		DA3383C5967A4380B1ADDF16 /* AnalysisKit */ = {
+			isa = PBXGroup;
+			children = (
+				7EEA703C2EF04BAB9F334166 /* AdvancedEmotionAnalyzer.swift */,
+				47DE8860A4B74BE893635B3D /* TextEmotionAnalyzer.swift */,
+			);
+			path = AnalysisKit;
 			sourceTree = "<group>";
 		};
 		014DA1BA2EA6A8D7009139E4 = {
@@ -125,6 +170,7 @@
 				014258162EAA79190016E590 /* Assets.xcassets */,
 				0142581B2EAA79190016E590 /* Core */,
 				014258442EAA93B00016E590 /* Views */,
+				2465EEAD908E41BF9CF9FB65 /* Services */,
 				014258462EAA93B10016E590 /* Modules */,
 				0142581C2EAA79190016E590 /* MetaWave.xcodeproj */,
 			);
@@ -254,6 +300,14 @@
 				014258372EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */,
 				0180F3572EAD16DD0070A38B /* VoiceInputView_v2.1.swift in Sources */,
 				0180F3592EAD16DD0070A38B /* SpeechRecognitionService.swift in Sources */,
+				0228B4B540444BB38D5EA755 /* InsightCards.swift in Sources */,
+				059D332E3535454690230594 /* PatternAnalysisView.swift in Sources */,
+				5A73BCFD5E554E63B84686E5 /* PredictionView.swift in Sources */,
+				92707EEBE43948D8919CA224 /* AnalysisService.swift in Sources */,
+				89E4D57B04FF470CAA11AA28 /* PatternAnalysisService.swift in Sources */,
+				DAE08CA030BF4F94B4AF40A2 /* PredictionService.swift in Sources */,
+				9D8DAFBFF77B4DEEA628EA91 /* AdvancedEmotionAnalyzer.swift in Sources */,
+				F0B8B0C86741449D81DEA4B3 /* TextEmotionAnalyzer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +324,14 @@
 				014258362EAA93440016E590 /* MetaWave.xcdatamodeld in Sources */,
 				0180F35B2EAD16DD0070A38B /* VoiceInputView_v2.1.swift in Sources */,
 				0180F35C2EAD16DD0070A38B /* SpeechRecognitionService.swift in Sources */,
+				0228B4B640444BB38D5EA756 /* InsightCards.swift in Sources */,
+				059D332F3535454690230595 /* PatternAnalysisView.swift in Sources */,
+				5A73BCFE5E554E63B84686E6 /* PredictionView.swift in Sources */,
+				92707EEBE43948D8919CA225 /* AnalysisService.swift in Sources */,
+				89E4D57C04FF470CAA11AA29 /* PatternAnalysisService.swift in Sources */,
+				DAE08CA130BF4F94B4AF40A3 /* PredictionService.swift in Sources */,
+				9D8DAFC0F77B4DEEA628EA92 /* AdvancedEmotionAnalyzer.swift in Sources */,
+				F0B8B0C96741449D81DEA4B4 /* TextEmotionAnalyzer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

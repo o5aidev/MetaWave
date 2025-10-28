@@ -8,9 +8,9 @@
 import Foundation
 import CoreData
 import SwiftUI
+import Combine
 
 /// 予測機能サービス
-@MainActor
 final class PredictionService: ObservableObject {
     
     private let context: NSManagedObjectContext
