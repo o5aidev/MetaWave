@@ -14,6 +14,8 @@ struct DataExportView: View {
     @State private var selectedFormat: ExportFormat = .json
     @State private var showShareSheet = false
     @State private var exportData: Data?
+    @State private var errorMessage: String?
+    @State private var showError = false
     @Environment(\.dismiss) private var dismiss
     
     enum ExportFormat: String, CaseIterable {
@@ -74,7 +76,11 @@ struct DataExportView: View {
                     ShareSheet(activityItems: [data])
                 }
             }
-        }
+            .alert("エラー", isPresented: $showError) {
+                Button("OK") { }
+            } message: {
+                Text(errorMessage ?? "不明なエラーが発生しました")
+            }
     }
     
     // MARK: - View Components
@@ -173,7 +179,9 @@ struct DataExportView: View {
             exportData = data
             showShareSheet = true
         } catch {
-            print("Export failed: \(error)")
+            errorMessage = error.localizedDescription
+            showError = true
+            print("❌ Export failed: \(error)")
         }
     }
 }
