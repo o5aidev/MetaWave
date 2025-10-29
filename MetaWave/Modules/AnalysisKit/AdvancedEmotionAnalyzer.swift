@@ -8,11 +8,10 @@
 import Foundation
 import NaturalLanguage
 
-// 型定義（グローバルスコープ）
-// EmotionScore型はTextEmotionAnalyzer.swiftでも定義
+// 型定義はAnalysisTypes.swiftで定義済み
 
 /// 高度な感情分析実装
-final class AdvancedEmotionAnalyzer {
+final class AdvancedEmotionAnalyzer: EmotionAnalyzer {
     
     private let baseAnalyzer: TextEmotionAnalyzer
     private let sentimentAnalyzer: NLModel? = nil // TODO: MLModel初期化
