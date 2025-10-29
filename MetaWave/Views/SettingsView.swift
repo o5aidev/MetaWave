@@ -32,6 +32,9 @@ struct SettingsView: View {
                 // データ管理セクション
                 dataManagementSection
                 
+                // テーマ設定セクション
+                themeSection
+                
                 // 分析設定セクション
                 analysisSection
                 
@@ -179,6 +182,16 @@ struct SettingsView: View {
                 }
             }
             
+            // バックアップ・復元
+            NavigationLink(destination: BackupSettingsView()) {
+                HStack {
+                    Image(systemName: "externaldrive")
+                        .foregroundColor(.purple)
+                    Text("Backup & Restore")
+                    Spacer()
+                }
+            }
+            
             // 剪定機能
             NavigationLink(destination: PruningView(context: viewContext)) {
                 HStack {
@@ -197,6 +210,29 @@ struct SettingsView: View {
                     Text("Delete All Data")
                     Spacer()
                 }
+            }
+        }
+    }
+    
+    // MARK: - Theme Section
+    
+    private var themeSection: some View {
+        Section("テーマ設定") {
+            NavigationLink(destination: ThemePreview()) {
+                HStack {
+                    Image(systemName: "paintbrush")
+                        .foregroundColor(.purple)
+                    Text("テーマ設定")
+                    Spacer()
+                }
+            }
+            
+            HStack {
+                Image(systemName: "moon")
+                    .foregroundColor(.blue)
+                Text("ダークモード")
+                Spacer()
+                Toggle("", isOn: .constant(false))
             }
         }
     }
