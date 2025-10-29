@@ -57,6 +57,9 @@ struct SettingsView: View {
             } message: {
                 Text(exportMessage)
             }
+            .sheet(isPresented: $showingExportView) {
+                DataExportView(context: viewContext)
+            }
         }
     }
     
@@ -279,6 +282,28 @@ struct SettingsView: View {
     }
     
     private func exportData() {
+        showingExportView = true
+        /* 旧実装をDataExportViewに移行
+        Task {
+            do {
+                let exportData = try await generateExportData()
+                let jsonString = String(data: exportData, encoding: .utf8) ?? "Export failed"
+                
+                await MainActor.run {
+                    exportMessage = "Data exported successfully. \(jsonString.count) characters of data ready for export."
+                    showingExportAlert = true
+                }
+            } catch {
+                await MainActor.run {
+                    exportMessage = "Export failed: \(error.localizedDescription)"
+                    showingExportAlert = true
+                }
+            }
+        }
+        */
+    }
+    
+    private func exportDataOld() {
         Task {
             do {
                 let exportData = try await generateExportData()
