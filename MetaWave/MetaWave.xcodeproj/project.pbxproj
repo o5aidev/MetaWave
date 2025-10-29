@@ -45,6 +45,16 @@
 		F0B8B0C96741449D81DEA4B4 /* TextEmotionAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DE8860A4B74BE893635B3D /* TextEmotionAnalyzer.swift */; };
 		8F9E8165F3664578B5CAC745 /* Note+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AFC633ABF74B8F83ED45A4 /* Note+Extensions.swift */; };
 		8F9E8166F3664578B5CAC746 /* Note+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AFC633ABF74B8F83ED45A4 /* Note+Extensions.swift */; };
+		B2682BF932A04D6AA3FAFAF0 /* AnalysisVisualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14811EC794F4104AF008612 /* AnalysisVisualization.swift */; };
+		B2682BF932A04D6AA3FAFAF1 /* AnalysisVisualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14811EC794F4104AF008612 /* AnalysisVisualization.swift */; };
+		38C88691F8E64515B936018A /* PerformanceOptimizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A98FBB4C294423B981CC3D /* PerformanceOptimizer.swift */; };
+		38C88691F8E64515B936018B /* PerformanceOptimizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A98FBB4C294423B981CC3D /* PerformanceOptimizer.swift */; };
+		5F6C0FAC5CA1475F89A9AE72 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DC9A0DC0324BD0B0AC949E /* BackupService.swift */; };
+		5F6C0FAC5CA1475F89A9AE73 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DC9A0DC0324BD0B0AC949E /* BackupService.swift */; };
+		BD13335C46A548B2830D2976 /* BackupSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074F7D46076240F2B7B6276B /* BackupSettingsView.swift */; };
+		BD13335C46A548B2830D2977 /* BackupSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074F7D46076240F2B7B6276B /* BackupSettingsView.swift */; };
+		21A814B21CE243A3AD965EDA /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B3182AA71240969DA03F71 /* ThemeManager.swift */; };
+		21A814B21CE243A3AD965EDB /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B3182AA71240969DA03F71 /* ThemeManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +84,11 @@
 		47DE8860A4B74BE893635B3D /* TextEmotionAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEmotionAnalyzer.swift; sourceTree = "<group>"; };
 		91AFC633ABF74B8F83ED45A4 /* Note+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Note+Extensions.swift"; sourceTree = "<group>"; };
 		3EF8FABF80B24FFDA88D1BC4 /* Insight+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Insight+Extensions.swift"; sourceTree = "<group>"; };
+		F14811EC794F4104AF008612 /* AnalysisVisualization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisVisualization.swift; sourceTree = "<group>"; };
+		19A98FBB4C294423B981CC3D /* PerformanceOptimizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceOptimizer.swift; sourceTree = "<group>"; };
+		58DC9A0DC0324BD0B0AC949E /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
+		074F7D46076240F2B7B6276B /* BackupSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSettingsView.swift; sourceTree = "<group>"; };
+		33B3182AA71240969DA03F71 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +148,8 @@
 				672C6C6CA19941FBB796ACB3 /* InsightCards.swift */,
 				068D190205144781BE388E14 /* PatternAnalysisView.swift */,
 				64BC28343C0F40A793AC540A /* PredictionView.swift */,
+				F14811EC794F4104AF008612 /* AnalysisVisualization.swift */,
+				074F7D46076240F2B7B6276B /* BackupSettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -161,6 +178,9 @@
 				CF98DD6243B246E6988D4664 /* AnalysisTypes.swift */,
 				E6B960CA20F441E38F713DF9 /* PatternAnalysisService.swift */,
 				C96B8DD2814545198EC6B407 /* PredictionService.swift */,
+				19A98FBB4C294423B981CC3D /* PerformanceOptimizer.swift */,
+				58DC9A0DC0324BD0B0AC949E /* BackupService.swift */,
+				33B3182AA71240969DA03F71 /* ThemeManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -338,6 +358,11 @@
 				DAE08CA030BF4F94B4AF40A2 /* PredictionService.swift in Sources */,
 				9D8DAFBFF77B4DEEA628EA91 /* AdvancedEmotionAnalyzer.swift in Sources */,
 				F0B8B0C86741449D81DEA4B3 /* TextEmotionAnalyzer.swift in Sources */,
+				B2682BF932A04D6AA3FAFAF0 /* AnalysisVisualization.swift in Sources */,
+				38C88691F8E64515B936018A /* PerformanceOptimizer.swift in Sources */,
+				5F6C0FAC5CA1475F89A9AE72 /* BackupService.swift in Sources */,
+				BD13335C46A548B2830D2976 /* BackupSettingsView.swift in Sources */,
+				21A814B21CE243A3AD965EDA /* ThemeManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,6 +389,11 @@
 				DAE08CA130BF4F94B4AF40A3 /* PredictionService.swift in Sources */,
 				9D8DAFC0F77B4DEEA628EA92 /* AdvancedEmotionAnalyzer.swift in Sources */,
 				F0B8B0C96741449D81DEA4B4 /* TextEmotionAnalyzer.swift in Sources */,
+				B2682BF932A04D6AA3FAFAF1 /* AnalysisVisualization.swift in Sources */,
+				38C88691F8E64515B936018B /* PerformanceOptimizer.swift in Sources */,
+				5F6C0FAC5CA1475F89A9AE73 /* BackupService.swift in Sources */,
+				BD13335C46A548B2830D2977 /* BackupSettingsView.swift in Sources */,
+				21A814B21CE243A3AD965EDB /* ThemeManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
