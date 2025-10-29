@@ -18,6 +18,7 @@ struct SettingsView: View {
     @State private var exportMessage = ""
     @State private var dailyReminderTime = Date()
     @State private var showingNotificationSettings = false
+    @State private var showingExportView = false
     
     var body: some View {
         NavigationView {

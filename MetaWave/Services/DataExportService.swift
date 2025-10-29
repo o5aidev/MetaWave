@@ -116,98 +116,64 @@ final class DataExportService: ObservableObject {
     // MARK: - Private Methods
     
     private func fetchAllNotes() async throws -> [ExportNote] {
-        let request: NSFetchRequest<Note> = Note.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Note.createdAt, ascending: true)]
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)]
         
-        let notes = try context.fetch(request)
+        let items = try context.fetch(request)
         
-        return notes.compactMap { note in
-            guard let id = note.id,
-                  let createdAt = note.createdAt else {
+        return items.compactMap { item in
+            guard let timestamp = item.timestamp,
+                  let title = item.title else {
                 return nil
             }
             
+            // ItemをNoteとして扱う
             return ExportNote(
-                id: id.uuidString,
-                modality: note.modality ?? "text",
-                contentText: note.contentText,
-                audioURL: note.audioURL?.absoluteString,
-                sentiment: note.sentiment,
-                arousal: note.arousal,
-                tags: note.tags?.components(separatedBy: ",") ?? [],
-                createdAt: createdAt,
-                updatedAt: note.updatedAt
+                id: UUID().uuidString, // Itemにはidがないので生成
+                modality: "text",
+                contentText: item.note,
+                audioURL: nil,
+                sentiment: nil, // Itemには感情データなし
+                arousal: nil,
+                tags: [],
+                createdAt: timestamp,
+                updatedAt: timestamp
             )
         }
     }
     
     private func fetchEmotionData() async throws -> [ExportEmotionData] {
-        let request: NSFetchRequest<Note> = Note.fetchRequest()
-        request.predicate = NSPredicate(format: "sentiment != nil")
-        
-        let notes = try context.fetch(request)
-        
-        return notes.compactMap { note in
-            guard let sentiment = note.sentiment,
-                  let createdAt = note.createdAt else {
-                return nil
-            }
-            
-            return ExportEmotionData(
-                noteID: note.id?.uuidString ?? "",
-                valence: sentiment.doubleValue,
-                arousal: note.arousal?.doubleValue ?? 0.0,
-                timestamp: createdAt
-            )
-        }
+        // Itemには感情データがないので、空配列を返す
+        return []
     }
     
     private func fetchPatternData() async throws -> [ExportPattern] {
-        let request: NSFetchRequest<Insight> = Insight.fetchRequest()
-        request.predicate = NSPredicate(format: "kind == 'loop'")
-        
-        let insights = try context.fetch(request)
-        
-        return insights.compactMap { insight in
-            guard let payload = insight.payload,
-                  let data = payload.data(using: .utf8),
-                  let loopPayload = try? JSONDecoder().decode(LoopInsightPayload.self, from: data) else {
-                return nil
-            }
-            
-            return ExportPattern(
-                topic: loopPayload.topic,
-                strength: loopPayload.strength,
-                noteCount: loopPayload.noteCount,
-                detectedAt: insight.createdAt ?? Date()
-            )
-        }
+        // Itemにはパターンデータがないので、空配列を返す
+        return []
     }
     
     private func generateMetadata() async throws -> ExportMetadata {
-        let request: NSFetchRequest<Note> = Note.fetchRequest()
-        let notes = try context.fetch(request)
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        let items = try context.fetch(request)
         
-        let textNotes = notes.filter { $0.modality == "text" }.count
-        let audioNotes = notes.filter { $0.modality == "voice" }.count
-        
+        // Itemにはmodalityがないので、すべてテキストとして扱う
         return ExportMetadata(
-            totalNotes: notes.count,
-            textNotes: textNotes,
-            audioNotes: audioNotes,
-            firstNoteDate: notes.first?.createdAt,
-            lastNoteDate: notes.last?.createdAt
+            totalNotes: items.count,
+            textNotes: items.count,
+            audioNotes: 0,
+            firstNoteDate: items.first?.timestamp,
+            lastNoteDate: items.last?.timestamp
         )
     }
     
-    private func formatNoteAsCSVLine(_ note: Note) -> String {
-        let timestamp = note.createdAt?.timeIntervalSince1970 ?? 0
-        let modality = note.modality ?? "text"
+    private func formatNoteAsCSVLine(_ note: ExportNote) -> String {
+        let timestamp = note.createdAt.timeIntervalSince1970
+        let modality = note.modality
         let content = (note.contentText ?? "").replacingOccurrences(of: "\"", with: "\"\"")
         let valence = note.sentiment?.doubleValue ?? 0.0
         let arousal = note.arousal?.doubleValue ?? 0.0
-        let tags = note.tags ?? ""
-        let createdAt = note.createdAt?.timeIntervalSince1970 ?? 0
+        let tags = note.tags.joined(separator: ",")
+        let createdAt = note.createdAt.timeIntervalSince1970
         
         return "\"\(timestamp)\",\"\(modality)\",\"\(content)\",\(valence),\(arousal),\"\(tags)\",\(createdAt)"
     }
