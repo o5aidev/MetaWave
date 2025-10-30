@@ -1,6 +1,6 @@
 import Foundation
 
 func migrateWrappedKeyToSynchronizableIfNeeded() {
-    print("[Migration] Checking wrapped key migration...")
+    // quiet: no console output in production or debug
     // 将来的にKeychain仕様変更時にここでマイグレーションを行う
 }
