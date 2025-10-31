@@ -13,7 +13,9 @@ import Foundation
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @State private var selectedTab = 0
+    @StateObject private var onboardingManager = OnboardingManager()
+    @State private var selectedTab = 1
+    @State private var analysisSelection: AnalysisSection = .overview
     
     init() {
         // フェッチバッチサイズは別途設定
@@ -22,18 +24,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             // Notes Tab
-            // NotesView は今後Xcodeで追加してください
-            NavigationView {
-                VStack {
-                    Text("Notes Tab")
-                        .font(.largeTitle)
-                    Text("NotesView.swift をXcodeプロジェクトに追加してください")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                }
-            }
+            NotesView(onVoiceNoteAdd: addVoiceNote)
             .tabItem {
                 Image(systemName: "note.text")
                 Text("Notes")
@@ -42,25 +33,29 @@ struct ContentView: View {
             
             // Analysis Tab
             NavigationView {
-                TabView {
-                    // 概要
-                    InsightCardsView()
-                        .tabItem {
-                            Label("概要", systemImage: "chart.bar.fill")
-                        }
+                VStack(spacing: 16) {
+                    Picker("分析ビュー", selection: $analysisSelection) {
+                        Text("概要").tag(AnalysisSection.overview)
+                        Text("パターン").tag(AnalysisSection.patterns)
+                        Text("予測").tag(AnalysisSection.predictions)
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal)
                     
-                    // パターン分析
-                    PatternAnalysisView(context: viewContext)
-                        .tabItem {
-                            Label("パターン", systemImage: "chart.line.uptrend.xyaxis")
+                    Group {
+                        switch analysisSelection {
+                        case .overview:
+                            InsightCardsView()
+                        case .patterns:
+                            PatternAnalysisView(context: viewContext)
+                        case .predictions:
+                            PredictionView(context: viewContext)
                         }
-                    
-                    // 予測分析
-                    PredictionView(context: viewContext)
-                        .tabItem {
-                            Label("予測", systemImage: "chart.bar.xaxis")
-                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .padding(.top, 16)
+                .navigationTitle("分析")
             }
             .tabItem {
                 Image(systemName: "brain.head.profile")
@@ -77,6 +72,13 @@ struct ContentView: View {
                 Text("Settings")
             }
             .tag(2)
+        }
+        .fullScreenCover(isPresented: $onboardingManager.shouldShowOnboarding) {
+            OnboardingView()
+        }
+        .errorHandling {
+            // エラー時の再試行処理
+            print("エラーが発生しました。再試行します。")
         }
     }
 
@@ -196,6 +198,12 @@ struct ContentView: View {
             return "安定（中性）"
         }
     }
+}
+
+private enum AnalysisSection: Hashable {
+    case overview
+    case patterns
+    case predictions
 }
 
 // MARK: - Simple Voice Input View

@@ -186,7 +186,32 @@ enum CustomColor {
     }
     
     var system: Color {
-        return Color.primary
+        switch self {
+        case .primary:
+            return Color.accentColor
+        case .secondary:
+            return Color(UIColor.secondaryLabel)
+        case .accent:
+            return Color(UIColor.systemBlue)
+        case .background:
+            return Color(UIColor.systemBackground)
+        case .surface:
+            return Color(UIColor.secondarySystemBackground)
+        case .text:
+            return Color.primary
+        case .textSecondary:
+            return Color.secondary
+        case .border:
+            return Color(UIColor.separator)
+        case .success:
+            return Color(UIColor.systemGreen)
+        case .warning:
+            return Color(UIColor.systemOrange)
+        case .error:
+            return Color(UIColor.systemRed)
+        case .info:
+            return Color(UIColor.systemBlue)
+        }
     }
 }
 
