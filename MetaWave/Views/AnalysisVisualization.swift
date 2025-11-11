@@ -11,11 +11,9 @@ import Charts
 
 struct AnalysisVisualizationView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @State private var emotionData: [EmotionDataPoint] = []
-    @State private var patternData: [PatternDataPoint] = []
-    @State private var predictionData: [PredictionDataPoint] = []
-    @State private var isLoading = false
+    @StateObject private var viewModel: AnalysisVisualizationViewModel
     @State private var selectedTab: AnalysisTab = .emotion
+    @State private var refreshToken = UUID()
     
     enum AnalysisTab: String, CaseIterable {
         case emotion = "感情分析"
@@ -32,7 +30,7 @@ struct AnalysisVisualizationView: View {
     }
     
     init(context: NSManagedObjectContext) {
-        // 初期化処理
+        _viewModel = StateObject(wrappedValue: AnalysisVisualizationViewModel(context: context))
     }
     
     var body: some View {
@@ -56,7 +54,40 @@ struct AnalysisVisualizationView: View {
             }
             .navigationTitle("分析結果")
             .onAppear {
-                loadAnalysisData()
+                viewModel.beginLoading()
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        refreshToken = UUID()
+                        viewModel.beginLoading(force: true)
+                    } label: {
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                        } else {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                    }
+                    .disabled(viewModel.isLoading)
+                    .accessibilityLabel("分析データを再取得")
+                }
+            }
+            .overlay {
+                if viewModel.isLoading {
+                    VStack(spacing: 12) {
+                        ProgressView(value: viewModel.loadingProgress)
+                            .progressViewStyle(.linear)
+                            .padding(.horizontal, 32)
+                        if let phase = viewModel.loadingPhase {
+                            Text(phase)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.ultraThinMaterial)
+                }
             }
         }
     }
@@ -116,7 +147,7 @@ struct AnalysisVisualizationView: View {
                 .padding(.horizontal)
             
             if #available(iOS 17.0, *) {
-                Chart(emotionData) { data in
+                Chart(viewModel.emotionData) { data in
                     SectorMark(
                         angle: .value("Count", data.count),
                         innerRadius: .ratio(0.5),
@@ -137,7 +168,7 @@ struct AnalysisVisualizationView: View {
     
     private var emotionDistributionLegacy: some View {
         VStack(spacing: 12) {
-            ForEach(emotionData, id: \.emotion) { data in
+            ForEach(viewModel.emotionData, id: \.emotion) { data in
                 HStack {
                     Circle()
                         .fill(data.color)
@@ -166,7 +197,7 @@ struct AnalysisVisualizationView: View {
                 .padding(.horizontal)
             
             if #available(iOS 16.0, *) {
-                Chart(emotionData) { data in
+                Chart(viewModel.emotionData) { data in
                     LineMark(
                         x: .value("Date", data.date),
                         y: .value("Valence", data.valence)
@@ -198,7 +229,7 @@ struct AnalysisVisualizationView: View {
             
             // 簡易的なバー表示
             HStack(alignment: .bottom, spacing: 4) {
-                ForEach(emotionData.prefix(7), id: \.date) { data in
+                ForEach(viewModel.emotionData.prefix(7), id: \.date) { data in
                     VStack {
                         Rectangle()
                             .fill(Color.blue)
@@ -221,25 +252,25 @@ struct AnalysisVisualizationView: View {
         ], spacing: 12) {
             StatisticCard(
                 title: "平均感情",
-                value: String(format: "%.2f", averageValence),
+                value: String(format: "%.2f", viewModel.averageValence),
                 color: .blue
             )
             
             StatisticCard(
                 title: "平均覚醒度",
-                value: String(format: "%.2f", averageArousal),
+                value: String(format: "%.2f", viewModel.averageArousal),
                 color: .red
             )
             
             StatisticCard(
                 title: "記録数",
-                value: "\(emotionData.count)",
+                value: "\(viewModel.emotionData.count)",
                 color: .green
             )
             
             StatisticCard(
                 title: "分析期間",
-                value: analysisPeriod,
+                value: viewModel.analysisPeriod,
                 color: .orange
             )
         }
@@ -269,7 +300,7 @@ struct AnalysisVisualizationView: View {
                 .font(.headline)
                 .padding(.horizontal)
             
-            if patternData.isEmpty {
+            if viewModel.patternData.isEmpty {
                 Text("パターンデータがありません")
                     .foregroundColor(.secondary)
                     .frame(height: 150)
@@ -279,7 +310,7 @@ struct AnalysisVisualizationView: View {
                     GridItem(.flexible()),
                     GridItem(.flexible())
                 ], spacing: 12) {
-                    ForEach(patternData, id: \.id) { pattern in
+                    ForEach(viewModel.patternData, id: \.id) { pattern in
                         PatternCard(pattern: pattern)
                     }
                 }
@@ -321,13 +352,13 @@ struct AnalysisVisualizationView: View {
         ], spacing: 12) {
             StatisticCard(
                 title: "発見パターン",
-                value: "\(patternData.count)",
+                value: "\(viewModel.patternData.count)",
                 color: .purple
             )
             
             StatisticCard(
                 title: "最大クラスタ",
-                value: "\(maxClusterSize)",
+                value: "\(viewModel.maxClusterSize)",
                 color: .indigo
             )
         }
@@ -370,7 +401,7 @@ struct AnalysisVisualizationView: View {
                     .rotationEffect(.degrees(-90))
                 
                 VStack {
-                    Text("\(Int(predictionAccuracy))%")
+                    Text("\(Int(viewModel.predictionAccuracy))%")
                         .font(.title)
                         .fontWeight(.bold)
                     Text("精度")
@@ -390,7 +421,7 @@ struct AnalysisVisualizationView: View {
                 .font(.headline)
                 .padding(.horizontal)
             
-            ForEach(predictionData, id: \.id) { prediction in
+            ForEach(viewModel.predictionData, id: \.id) { prediction in
                 HStack {
                     Text(prediction.type)
                         .font(.subheadline)
@@ -418,139 +449,14 @@ struct AnalysisVisualizationView: View {
         ], spacing: 12) {
             StatisticCard(
                 title: "予測数",
-                value: "\(predictionData.count)",
+                value: "\(viewModel.predictionData.count)",
                 color: .cyan
             )
             
             StatisticCard(
                 title: "平均信頼度",
-                value: String(format: "%.1f%%", averageConfidence * 100),
+                value: String(format: "%.1f%%", viewModel.averageConfidence * 100),
                 color: .mint
-            )
-        }
-    }
-    
-    // MARK: - Helper Methods
-    
-    private func loadAnalysisData() {
-        isLoading = true
-        
-        Task {
-            // 感情データの読み込み
-            await loadEmotionData()
-            
-            // パターンデータの読み込み
-            await loadPatternData()
-            
-            // 予測データの読み込み
-            await loadPredictionData()
-            
-            await MainActor.run {
-                isLoading = false
-            }
-        }
-    }
-    
-    private func loadEmotionData() async {
-        // 実際のデータ読み込み処理
-        // ここではサンプルデータを生成
-        let sampleData = generateSampleEmotionData()
-        await MainActor.run {
-            self.emotionData = sampleData
-        }
-    }
-    
-    private func loadPatternData() async {
-        // 実際のデータ読み込み処理
-        let sampleData = generateSamplePatternData()
-        await MainActor.run {
-            self.patternData = sampleData
-        }
-    }
-    
-    private func loadPredictionData() async {
-        // 実際のデータ読み込み処理
-        let sampleData = generateSamplePredictionData()
-        await MainActor.run {
-            self.predictionData = sampleData
-        }
-    }
-    
-    // MARK: - Computed Properties
-    
-    private var averageValence: Double {
-        guard !emotionData.isEmpty else { return 0 }
-        return emotionData.map { $0.valence }.reduce(0, +) / Double(emotionData.count)
-    }
-    
-    private var averageArousal: Double {
-        guard !emotionData.isEmpty else { return 0 }
-        return emotionData.map { $0.arousal }.reduce(0, +) / Double(emotionData.count)
-    }
-    
-    private var analysisPeriod: String {
-        guard let first = emotionData.first?.date,
-              let last = emotionData.last?.date else {
-            return "データなし"
-        }
-        
-        let days = Calendar.current.dateComponents([.day], from: first, to: last).day ?? 0
-        return "\(days)日間"
-    }
-    
-    private var maxClusterSize: Int {
-        patternData.map { $0.clusterSize }.max() ?? 0
-    }
-    
-    private var predictionAccuracy: Double {
-        // 実際の予測精度計算
-        return 85.5
-    }
-    
-    private var averageConfidence: Double {
-        guard !predictionData.isEmpty else { return 0 }
-        return predictionData.map { $0.confidence }.reduce(0, +) / Double(predictionData.count)
-    }
-    
-    // MARK: - Sample Data Generation
-    
-    private func generateSampleEmotionData() -> [EmotionDataPoint] {
-        let emotions = ["喜び", "悲しみ", "怒り", "恐れ", "驚き", "嫌悪"]
-        let colors = [Color.red, Color.blue, Color.green, Color.orange, Color.purple, Color.pink]
-        
-        return emotions.enumerated().map { index, emotion in
-            EmotionDataPoint(
-                id: UUID(),
-                emotion: emotion,
-                count: Int.random(in: 5...50),
-                valence: Double.random(in: -1...1),
-                arousal: Double.random(in: 0...1),
-                date: Calendar.current.date(byAdding: .day, value: -index, to: Date()) ?? Date(),
-                color: colors[index]
-            )
-        }
-    }
-    
-    private func generateSamplePatternData() -> [PatternDataPoint] {
-        return (0..<6).map { index in
-            PatternDataPoint(
-                id: UUID(),
-                pattern: "パターン \(index + 1)",
-                strength: Double.random(in: 0.3...1.0),
-                clusterSize: Int.random(in: 3...15),
-                description: "説明 \(index + 1)"
-            )
-        }
-    }
-    
-    private func generateSamplePredictionData() -> [PredictionDataPoint] {
-        let types = ["感情予測", "行動予測", "パターン予測"]
-        return types.map { type in
-            PredictionDataPoint(
-                id: UUID(),
-                type: type,
-                confidence: Double.random(in: 0.6...0.95),
-                accuracy: Double.random(in: 0.7...0.9)
             )
         }
     }
@@ -609,6 +515,156 @@ struct StatisticCard: View {
     }
 }
 
+// MARK: - View Model
+
+@MainActor
+final class AnalysisVisualizationViewModel: ObservableObject {
+    @Published private(set) var emotionData: [EmotionDataPoint] = []
+    @Published private(set) var patternData: [PatternDataPoint] = []
+    @Published private(set) var predictionData: [PredictionDataPoint] = []
+    @Published private(set) var isLoading = false
+    @Published private(set) var loadingPhase: String?
+    @Published private(set) var loadingProgress: Double = 0
+    
+    private let context: NSManagedObjectContext
+    private var loadTask: Task<Void, Never>? {
+        didSet { oldValue?.cancel() }
+    }
+    
+    init(context: NSManagedObjectContext) {
+        self.context = context
+    }
+    
+    func beginLoading(force: Bool = false) {
+        guard !isLoading || force else { return }
+        loadTask = Task { await loadAll() }
+    }
+    
+    private func loadAll() async {
+        await setLoading(true, phase: "感情データを読み込み中…", progress: 0.05)
+        let emotion = await fetchEmotionData()
+        await applyEmotion(emotion)
+        
+        await setLoading(true, phase: "パターン分析を適用中…", progress: 0.45)
+        let pattern = await fetchPatternData()
+        await applyPattern(pattern)
+        
+        await setLoading(true, phase: "予測モデルを評価中…", progress: 0.75)
+        let predictions = await fetchPredictionData()
+        await applyPrediction(predictions)
+        
+        await setLoading(false, phase: "完了", progress: 1.0)
+    }
+    
+    private func fetchEmotionData() async -> [EmotionDataPoint] {
+        try? await Task.sleep(nanoseconds: 120_000_000)
+        let emotions = ["喜び", "悲しみ", "怒り", "恐れ", "驚き", "嫌悪"]
+        let colors = [Color.red, Color.blue, Color.green, Color.orange, Color.purple, Color.pink]
+        return emotions.enumerated().map { index, emotion in
+            EmotionDataPoint(
+                id: UUID(),
+                emotion: emotion,
+                count: Int.random(in: 5...50),
+                valence: Double.random(in: -1...1),
+                arousal: Double.random(in: 0...1),
+                date: Calendar.current.date(byAdding: .day, value: -index, to: Date()) ?? Date(),
+                color: colors[index]
+            )
+        }
+    }
+    
+    private func fetchPatternData() async -> [PatternDataPoint] {
+        try? await Task.sleep(nanoseconds: 90_000_000)
+        return (0..<6).map { index in
+            PatternDataPoint(
+                id: UUID(),
+                pattern: "パターン \(index + 1)",
+                strength: Double.random(in: 0.3...1.0),
+                clusterSize: Int.random(in: 3...15),
+                description: "説明 \(index + 1)"
+            )
+        }
+    }
+    
+    private func fetchPredictionData() async -> [PredictionDataPoint] {
+        try? await Task.sleep(nanoseconds: 80_000_000)
+        let types = ["感情予測", "行動予測", "パターン予測"]
+        return types.map { type in
+            PredictionDataPoint(
+                id: UUID(),
+                type: type,
+                confidence: Double.random(in: 0.6...0.95),
+                accuracy: Double.random(in: 0.7...0.9)
+            )
+        }
+    }
+    
+    private func applyEmotion(_ data: [EmotionDataPoint]) async {
+        await MainActor.run {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                self.emotionData = data.sorted { $0.date < $1.date }
+            }
+        }
+    }
+    
+    private func applyPattern(_ data: [PatternDataPoint]) async {
+        await MainActor.run {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                self.patternData = data.sorted { $0.strength > $1.strength }
+            }
+        }
+    }
+    
+    private func applyPrediction(_ data: [PredictionDataPoint]) async {
+        await MainActor.run {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                self.predictionData = data.sorted { $0.confidence > $1.confidence }
+            }
+        }
+    }
+    
+    private func setLoading(_ loading: Bool, phase: String?, progress: Double) async {
+        await MainActor.run {
+            isLoading = loading
+            loadingPhase = phase
+            loadingProgress = progress
+        }
+    }
+    
+    var averageValence: Double {
+        guard !emotionData.isEmpty else { return 0 }
+        return emotionData.map { $0.valence }.reduce(0, +) / Double(emotionData.count)
+    }
+    
+    var averageArousal: Double {
+        guard !emotionData.isEmpty else { return 0 }
+        return emotionData.map { $0.arousal }.reduce(0, +) / Double(emotionData.count)
+    }
+    
+    var analysisPeriod: String {
+        guard let first = emotionData.first?.date,
+              let last = emotionData.last?.date else {
+            return "データなし"
+        }
+        let days = Calendar.current.dateComponents([.day], from: first, to: last).day ?? 0
+        return "\(days)日間"
+    }
+    
+    var maxClusterSize: Int {
+        patternData.map { $0.clusterSize }.max() ?? 0
+    }
+    
+    var predictionAccuracy: Double {
+        guard !predictionData.isEmpty else { return 0 }
+        let average = predictionData.map { $0.accuracy }.reduce(0, +) / Double(predictionData.count)
+        return average * 100
+    }
+    
+    var averageConfidence: Double {
+        guard !predictionData.isEmpty else { return 0 }
+        return predictionData.map { $0.confidence }.reduce(0, +) / Double(predictionData.count)
+    }
+}
 struct PatternCard: View {
     let pattern: PatternDataPoint
     
