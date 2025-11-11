@@ -20,6 +20,7 @@ final class AnalysisService: ObservableObject {
     private let performanceMonitor = PerformanceMonitor.shared
     private let performanceOptimizer = PerformanceOptimizer.shared
     private let errorHandler = ErrorHandler.shared
+    private let analysisState = AnalysisStateStore()
     
     @Published var isAnalyzing = false
     @Published var analysisProgress: Float = 0.0
@@ -95,16 +96,7 @@ final class AnalysisService: ObservableObject {
             isAnalyzing = true
             analysisProgress = 0.0
         }
-        
-        let request: NSFetchRequest<Note> = Note.fetchRequest()
-        request.predicate = NSPredicate(format: "modality == 'text'")
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Note.createdAt, ascending: true)]
-        
-        let notes = try context.fetch(request)
-        let clusters = try await loopDetector.cluster(notes: notes)
-        
-        // ループクラスタをInsightとして保存
-        await saveLoopInsights(clusters)
+        let clusters = try await performLoopDetectionCore()
         
         await MainActor.run {
             isAnalyzing = false
@@ -129,23 +121,33 @@ final class AnalysisService: ObservableObject {
             
             do {
                 // 1. 感情分析（最適化済み）
-                try await analyzeAllEmotionsOptimized(settings: settings)
+                try await performanceMonitor.measurePhase("Emotion Analysis") {
+                    try await analyzeAllEmotionsOptimized(settings: settings)
+                }
                 await MainActor.run { analysisProgress = 0.25 }
                 
                 // 2. ループ検出
-                let clusters = try await detectLoops()
+                let clusters = try await performanceMonitor.measurePhase("Loop Detection") {
+                    try await performLoopDetectionCore()
+                }
                 await MainActor.run { analysisProgress = 0.5 }
                 
                 // 3. バイアス検出
-                let biasSignals = try await detectBiases()
+                let biasSignals = try await performanceMonitor.measurePhase("Bias Detection") {
+                    try await detectBiases()
+                }
                 await MainActor.run { analysisProgress = 0.75 }
                 
                 // 4. 統計情報の生成
-                let statistics = try await generateStatistics()
+                let statistics = try await performanceMonitor.measurePhase("Statistics Generation") {
+                    try await generateStatistics()
+                }
                 await MainActor.run { analysisProgress = 0.9 }
                 
                 // 5. インサイトの生成
-                let insights = try await generateInsights(clusters: clusters, statistics: statistics, biasSignals: biasSignals)
+                let insights = try await performanceMonitor.measurePhase("Insight Generation") {
+                    try await generateInsights(clusters: clusters, statistics: statistics, biasSignals: biasSignals)
+                }
                 await MainActor.run { analysisProgress = 1.0 }
                 
                 await MainActor.run {
@@ -153,12 +155,18 @@ final class AnalysisService: ObservableObject {
                     analysisProgress = 0.0
                 }
                 
-                return AnalysisResult(
+                let result = AnalysisResult(
                     clusters: clusters,
                     statistics: statistics,
                     insights: insights,
                     biasSignals: biasSignals
                 )
+                
+                analysisState.lastComprehensiveAnalysisDate = Date()
+                await MainActor.run {
+                    analysisProgress = 0.0
+                }
+                return result
             } catch {
                 errorHandler.logError(error, context: "Comprehensive Analysis")
                 await MainActor.run {
@@ -188,7 +196,7 @@ final class AnalysisService: ObservableObject {
                     group.addTask {
                         do {
                             return try await self.emotionAnalyzer.analyze(text: note.contentText ?? "")
-                        } catch {
+            } catch {
                             return nil
                         }
                     }
@@ -236,10 +244,22 @@ final class AnalysisService: ObservableObject {
     /// 最適化された感情分析
     private func analyzeAllEmotionsOptimized(settings: AnalysisSettings) async throws {
         let request: NSFetchRequest<Note> = Note.fetchRequest()
-        request.predicate = NSPredicate(format: "contentText != nil AND contentText != ''")
+        var predicates: [NSPredicate] = [
+            NSPredicate(format: "contentText != nil AND contentText != ''")
+        ]
+        if let lastAnalysisDate = analysisState.lastEmotionAnalysisDate {
+            predicates.append(NSPredicate(format: "updatedAt > %@", lastAnalysisDate as NSDate))
+        }
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        request.fetchBatchSize = settings.batchSize * 2
         
-        let notes = try context.fetch(request)
+        let notes = try fetchNotesSync(request)
         let totalNotes = notes.count
+        
+        guard totalNotes > 0 else {
+            analysisState.lastEmotionAnalysisDate = Date()
+            return
+        }
         
         // バッチ処理
         let batchSize = settings.batchSize
@@ -251,17 +271,17 @@ final class AnalysisService: ObservableObject {
             await withTaskGroup(of: Void.self) { group in
                 let maxConcurrent = settings.maxConcurrentOperations
                 var activeTasks = 0
-                
-                for note in batch {
+            
+            for note in batch {
                     if activeTasks >= maxConcurrent {
                         await group.next()
                         activeTasks -= 1
                     }
                     
                     group.addTask {
-                        do {
-                            try await self.analyzeEmotion(for: note)
-                        } catch {
+                do {
+                    try await self.analyzeEmotion(for: note)
+                } catch {
                             self.errorHandler.logError(error, context: "Emotion Analysis")
                         }
                     }
@@ -273,17 +293,33 @@ final class AnalysisService: ObservableObject {
             
             // 進捗更新
             await MainActor.run {
-                analysisProgress = Float(endIndex) / Float(totalNotes) * 0.25
+                let denominator = max(1, totalNotes)
+                analysisProgress = Float(endIndex) / Float(denominator) * 0.25
             }
         }
+        analysisState.lastEmotionAnalysisDate = Date()
     }
     
     /// バイアス検出
     private func detectBiases() async throws -> [BiasSignal: Float] {
         let request: NSFetchRequest<Note> = Note.fetchRequest()
-        let notes = try context.fetch(request)
+        request.fetchBatchSize = 50
+        let notes = try fetchNotesSync(request)
         
         return await biasDetector.evaluate(notes: notes)
+    }
+    
+    private func performLoopDetectionCore() async throws -> [LoopCluster] {
+        let request: NSFetchRequest<Note> = Note.fetchRequest()
+        request.predicate = NSPredicate(format: "modality == 'text'")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Note.createdAt, ascending: true)]
+        request.fetchBatchSize = 50
+        
+        let notes = try fetchNotesSync(request)
+        let clusters = try await loopDetector.cluster(notes: notes)
+        
+        await saveLoopInsights(clusters)
+        return clusters
     }
     
     private func saveLoopInsights(_ clusters: [LoopCluster]) async {
@@ -352,14 +388,14 @@ final class AnalysisService: ObservableObject {
         // ループインサイト
         for cluster in clusters.prefix(3) { // 上位3つのループ
             let insight = Insight.create(kind: .loop, noteIDs: cluster.noteIDs, in: context)
-            let payload = LoopInsightPayload(
-                topic: cluster.topic,
-                strength: cluster.strength,
-                noteCount: cluster.noteIDs.count,
+                let payload = LoopInsightPayload(
+                    topic: cluster.topic,
+                    strength: cluster.strength,
+                    noteCount: cluster.noteIDs.count,
                 timeSpan: calculateTimeSpan(for: cluster.noteIDs)
-            )
-            try insight.setPayload(payload)
-            insights.append(insight)
+                )
+                try insight.setPayload(payload)
+                insights.append(insight)
         }
         
         return insights
@@ -380,6 +416,46 @@ final class AnalysisService: ObservableObject {
         } catch {
             return 0
         }
+    }
+}
+
+// MARK: - State Store
+
+private struct AnalysisStateStore {
+    private let defaults = UserDefaults.standard
+    private let emotionKey = "com.metawave.analysis.lastEmotionAnalysisDate"
+    private let comprehensiveKey = "com.metawave.analysis.lastComprehensiveAnalysisDate"
+    
+    var lastEmotionAnalysisDate: Date? {
+        get { defaults.object(forKey: emotionKey) as? Date }
+        set { defaults.set(newValue, forKey: emotionKey) }
+    }
+    
+    var lastComprehensiveAnalysisDate: Date? {
+        get { defaults.object(forKey: comprehensiveKey) as? Date }
+        set { defaults.set(newValue, forKey: comprehensiveKey) }
+    }
+}
+
+// MARK: - Core Data Helpers
+
+private extension AnalysisService {
+    func fetchNotesSync(_ request: NSFetchRequest<Note>) throws -> [Note] {
+        var result: [Note] = []
+        var fetchError: Error?
+        
+        context.performAndWait {
+            do {
+                result = try context.fetch(request)
+            } catch {
+                fetchError = error
+            }
+        }
+        
+        if let fetchError {
+            throw fetchError
+        }
+        return result
     }
 }
 

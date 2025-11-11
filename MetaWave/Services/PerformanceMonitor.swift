@@ -18,10 +18,12 @@ final class PerformanceMonitor: ObservableObject {
     @Published var memoryUsage: Float = 0.0
     @Published var cpuUsage: Float = 0.0
     @Published var batteryLevel: Float = 0.0
+    @Published private(set) var latestAnalysisMetrics: [AnalysisPhaseMetric] = []
     
     private let logger = Logger(subsystem: "com.vibe5.MetaWave", category: "Performance")
     private var monitoringTimer: Timer?
     private var backgroundTaskID: UIBackgroundTaskIdentifier = .invalid
+    private let metricsRetentionLimit = 25
     
     private init() {
         setupNotifications()
@@ -97,7 +99,37 @@ final class PerformanceMonitor: ObservableObject {
         logger.info("Memory optimization performed")
     }
     
+    /// 分析フェーズの計測を実行
+    func measurePhase<T>(_ phase: String, operation: () async throws -> T) async rethrows -> T {
+        let start = Date()
+        do {
+            let result = try await operation()
+            let duration = Date().timeIntervalSince(start)
+            await recordPhaseMetric(phase: phase, duration: duration, success: true)
+            return result
+        } catch {
+            let duration = Date().timeIntervalSince(start)
+            await recordPhaseMetric(phase: phase, duration: duration, success: false)
+            throw error
+        }
+    }
+    
     // MARK: - Private Methods
+    
+    @MainActor
+    private func recordPhaseMetric(phase: String, duration: TimeInterval, success: Bool) {
+        let metric = AnalysisPhaseMetric(
+            phase: phase,
+            duration: duration,
+            timestamp: Date(),
+            success: success
+        )
+        latestAnalysisMetrics.append(metric)
+        if latestAnalysisMetrics.count > metricsRetentionLimit {
+            latestAnalysisMetrics.removeFirst(latestAnalysisMetrics.count - metricsRetentionLimit)
+        }
+        logger.info("Analysis phase '\(phase, privacy: .public)' completed in \(duration, format: .fixed(precision: 3))s (success: \(success))")
+    }
     
     private func setupNotifications() {
         NotificationCenter.default.addObserver(
@@ -230,6 +262,14 @@ struct AnalysisSettings {
     let batchSize: Int
     let maxConcurrentOperations: Int
     let enableHeavyAnalysis: Bool
+}
+
+struct AnalysisPhaseMetric: Identifiable {
+    let id = UUID()
+    let phase: String
+    let duration: TimeInterval
+    let timestamp: Date
+    let success: Bool
 }
 
 // MARK: - Error Handling
