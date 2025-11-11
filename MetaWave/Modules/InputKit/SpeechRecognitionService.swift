@@ -126,7 +126,7 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         #if targetEnvironment(simulator)
         print("⚠️ シミュレーター環境では音声入力はサポートされていません")
         throw SpeechRecognitionError.recognitionError("シミュレーターでは音声入力を使用できません。実機でテストしてください。")
-        #endif
+        #else
         
         // 音声エンジンの設定
         let inputNode = audioEngine.inputNode
@@ -251,6 +251,7 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
                 }
             }
         }
+        #endif
     }
     
     // MARK: - 音声認識の停止

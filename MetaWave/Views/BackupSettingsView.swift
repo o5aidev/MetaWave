@@ -288,8 +288,12 @@ struct BackupOptionsView: View {
                         color: .blue
                     ) {
                         Task {
-                            try? await backupService.createLocalBackup()
-                            dismiss()
+                            do {
+                                _ = try await backupService.createLocalBackup()
+                                dismiss()
+                            } catch {
+                                print("ローカルバックアップの作成に失敗しました: \(error.localizedDescription)")
+                            }
                         }
                     }
                     
@@ -300,8 +304,12 @@ struct BackupOptionsView: View {
                         color: .cyan
                     ) {
                         Task {
-                            try? await backupService.createCloudBackup()
-                            dismiss()
+                            do {
+                                _ = try await backupService.createCloudBackup()
+                                dismiss()
+                            } catch {
+                                print("iCloudバックアップの作成に失敗しました: \(error.localizedDescription)")
+                            }
                         }
                     }
                 }

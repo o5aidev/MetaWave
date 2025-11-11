@@ -115,7 +115,7 @@ struct AnalysisVisualizationView: View {
                 .font(.headline)
                 .padding(.horizontal)
             
-            if #available(iOS 16.0, *) {
+            if #available(iOS 17.0, *) {
                 Chart(emotionData) { data in
                     SectorMark(
                         angle: .value("Count", data.count),

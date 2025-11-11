@@ -40,6 +40,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "014DA1C22EA6A8D7009139E4"
+            BuildableName = "MetaWave.app"
+            BlueprintName = "MetaWave"
+            ReferencedContainer = "container:MetaWave.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-com.apple.CoreAnalytics:Disable"
@@ -62,16 +72,6 @@
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "014DA1C22EA6A8D7009139E4"
-            BuildableName = "MetaWave.app"
-            BlueprintName = "MetaWave"
-            ReferencedContainer = "container:MetaWave.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

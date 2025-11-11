@@ -1,6 +1,7 @@
 import SwiftUI
 import Speech
 import AVFoundation
+import UIKit
 
 // MARK: - 音声入力ビュー v2.1
 struct VoiceInputView_v2_1: View {
@@ -186,7 +187,7 @@ struct VoiceInputView_v2_1: View {
             }
             .disabled(recognizedText.isEmpty || isRecording) // 空または録音中は無効化
             .foregroundColor(recognizedText.isEmpty ? .gray : .blue)
-            .fontWeight(.semibold)
+            .font(.system(size: UIFont.preferredFont(forTextStyle: .headline).pointSize, weight: .semibold))
             .opacity(recognizedText.isEmpty ? 0.5 : 1.0)
         }
         .font(.headline)
