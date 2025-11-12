@@ -55,6 +55,14 @@
 		BD13335C46A548B2830D2977 /* BackupSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074F7D46076240F2B7B6276B /* BackupSettingsView.swift */; };
 		21A814B21CE243A3AD965EDA /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B3182AA71240969DA03F71 /* ThemeManager.swift */; };
 		21A814B21CE243A3AD965EDB /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B3182AA71240969DA03F71 /* ThemeManager.swift */; };
+		C3EFA0132F2F4BD8B9C4AB10 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EFA0122F2F4BD8B9C4AB10 /* MemoryManager.swift */; };
+		C3EFA0142F2F4BD8B9C4AB10 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EFA0122F2F4BD8B9C4AB10 /* MemoryManager.swift */; };
+		5BAF52222F2F4A04B1E8F9F1 /* FeedbackModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAF52212F2F4A04B1E8F9F1 /* FeedbackModels.swift */; };
+		5BAF52232F2F4A04B1E8F9F1 /* FeedbackModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAF52212F2F4A04B1E8F9F1 /* FeedbackModels.swift */; };
+		8C5C3D692F2F4A5ABF1E0CF5 /* FeedbackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5C3D682F2F4A5ABF1E0CF5 /* FeedbackStore.swift */; };
+		8C5C3D6A2F2F4A5ABF1E0CF5 /* FeedbackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5C3D682F2F4A5ABF1E0CF5 /* FeedbackStore.swift */; };
+		A4D0E1F12F2F4B1DA87E1234 /* FeedbackCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D0E1F02F2F4B1DA87E1234 /* FeedbackCenterView.swift */; };
+		A4D0E1F22F2F4B1DA87E1234 /* FeedbackCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D0E1F02F2F4B1DA87E1234 /* FeedbackCenterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +97,10 @@
 		58DC9A0DC0324BD0B0AC949E /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
 		074F7D46076240F2B7B6276B /* BackupSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSettingsView.swift; sourceTree = "<group>"; };
 		33B3182AA71240969DA03F71 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		5BAF52212F2F4A04B1E8F9F1 /* FeedbackModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackModels.swift; sourceTree = "<group>"; };
+		8C5C3D682F2F4A5ABF1E0CF5 /* FeedbackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackStore.swift; sourceTree = "<group>"; };
+		A4D0E1F02F2F4B1DA87E1234 /* FeedbackCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCenterView.swift; sourceTree = "<group>"; };
+		C3EFA0122F2F4BD8B9C4AB10 /* MemoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +142,7 @@
 		8F9E8165F3664578B5CAC744 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5BAF52212F2F4A04B1E8F9F1 /* FeedbackModels.swift */,
 				91AFC633ABF74B8F83ED45A4 /* Note+Extensions.swift */,
 				3EF8FABF80B24FFDA88D1BC4 /* Insight+Extensions.swift */,
 			);
@@ -150,6 +163,7 @@
 				64BC28343C0F40A793AC540A /* PredictionView.swift */,
 				F14811EC794F4104AF008612 /* AnalysisVisualization.swift */,
 				074F7D46076240F2B7B6276B /* BackupSettingsView.swift */,
+				A4D0E1F02F2F4B1DA87E1234 /* FeedbackCenterView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -180,7 +194,9 @@
 				C96B8DD2814545198EC6B407 /* PredictionService.swift */,
 				19A98FBB4C294423B981CC3D /* PerformanceOptimizer.swift */,
 				58DC9A0DC0324BD0B0AC949E /* BackupService.swift */,
+				8C5C3D682F2F4A5ABF1E0CF5 /* FeedbackStore.swift */,
 				33B3182AA71240969DA03F71 /* ThemeManager.swift */,
+				C3EFA0122F2F4BD8B9C4AB10 /* MemoryManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -363,6 +379,10 @@
 				5F6C0FAC5CA1475F89A9AE72 /* BackupService.swift in Sources */,
 				BD13335C46A548B2830D2976 /* BackupSettingsView.swift in Sources */,
 				21A814B21CE243A3AD965EDA /* ThemeManager.swift in Sources */,
+				5BAF52222F2F4A04B1E8F9F1 /* FeedbackModels.swift in Sources */,
+				8C5C3D692F2F4A5ABF1E0CF5 /* FeedbackStore.swift in Sources */,
+				A4D0E1F12F2F4B1DA87E1234 /* FeedbackCenterView.swift in Sources */,
+				C3EFA0132F2F4BD8B9C4AB10 /* MemoryManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,6 +414,10 @@
 				5F6C0FAC5CA1475F89A9AE73 /* BackupService.swift in Sources */,
 				BD13335C46A548B2830D2977 /* BackupSettingsView.swift in Sources */,
 				21A814B21CE243A3AD965EDB /* ThemeManager.swift in Sources */,
+				5BAF52232F2F4A04B1E8F9F1 /* FeedbackModels.swift in Sources */,
+				8C5C3D6A2F2F4A5ABF1E0CF5 /* FeedbackStore.swift in Sources */,
+				A4D0E1F22F2F4B1DA87E1234 /* FeedbackCenterView.swift in Sources */,
+				C3EFA0142F2F4BD8B9C4AB10 /* MemoryManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

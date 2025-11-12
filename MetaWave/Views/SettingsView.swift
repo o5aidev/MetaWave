@@ -182,6 +182,16 @@ struct SettingsView: View {
                 }
             }
             
+            // フィードバックセンター
+            NavigationLink(destination: FeedbackCenterView()) {
+                HStack {
+                    Image(systemName: "bubble.left.and.bubble.right")
+                        .foregroundColor(.mint)
+                    Text("Feedback Center")
+                    Spacer()
+                }
+            }
+            
             // バックアップ・復元
             NavigationLink(destination: BackupSettingsView()) {
                 HStack {
