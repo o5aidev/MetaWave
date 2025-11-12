@@ -56,13 +56,16 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private let vault: Vaulting
+    private let bufferPolicy: AudioBufferPolicy
+    private var audioCollector: StreamingAudioCollector?
     
     // ObservableObject のプロパティ
     var objectWillChange = PassthroughSubject<Void, Never>()
     
     // MARK: - 初期化
-    init(vault: Vaulting) {
+    init(vault: Vaulting, bufferPolicy: AudioBufferPolicy = .default) {
         self.vault = vault
+        self.bufferPolicy = bufferPolicy
         
         // 日本語音声認識の設定
         guard let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "ja-JP")) else {
@@ -126,7 +129,7 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         #if targetEnvironment(simulator)
         print("⚠️ シミュレーター環境では音声入力はサポートされていません")
         throw SpeechRecognitionError.recognitionError("シミュレーターでは音声入力を使用できません。実機でテストしてください。")
-        #endif
+        #else
         
         // 音声エンジンの設定
         let inputNode = audioEngine.inputNode
@@ -141,7 +144,7 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         print("✅ 録音フォーマット設定: \(validFormat.commonFormat) \(validFormat.sampleRate)Hz, \(validFormat.channelCount)ch")
         
         // 音声データのバッファリング
-        var audioData = Data()
+        audioCollector = StreamingAudioCollector(policy: bufferPolicy)
         let startTime = Date()
         
         // タップをインストール（バッファサイズを2048に増やしてパフォーマンス最適化）
@@ -149,11 +152,11 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
             recognitionRequest.append(buffer)
             
             // 音声データの収集（暗号化用・オプショナル）
-            // メモリ使用量を削減するため、必要に応じてのみ収集
-            if audioData.count < 10 * 1024 * 1024 { // 10MBまで制限
-                let audioBuffer = buffer.audioBufferList.pointee.mBuffers
-                let audioBytes = Data(bytes: audioBuffer.mData!, count: Int(audioBuffer.mDataByteSize))
-                audioData.append(audioBytes)
+            // メモリ使用量を削減するため、ポリシーに基づき収集
+            let audioBuffer = buffer.audioBufferList.pointee.mBuffers
+            if let baseAddress = audioBuffer.mData {
+                let audioBytes = Data(bytes: baseAddress, count: Int(audioBuffer.mDataByteSize))
+                audioCollector?.append(audioBytes)
             }
         }
         
@@ -190,7 +193,7 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
                             text: lastValidText, // 最後の有効なテキストを使用
                             confidence: 0.0,
                             duration: duration,
-                            audioData: audioData,
+                            audioData: audioCollector?.collectedData(),
                             timestamp: startTime
                         )
                         print("ℹ️ 音声が検出されませんでした（正常終了）")
@@ -241,7 +244,7 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
                         text: finalText,
                         confidence: averageConfidence,
                         duration: duration,
-                        audioData: audioData,
+                        audioData: audioCollector?.collectedData(),
                         timestamp: startTime
                     )
                     
@@ -251,6 +254,7 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
                 }
             }
         }
+        #endif
     }
     
     // MARK: - 音声認識の停止
@@ -259,6 +263,7 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
         recognitionTask = nil
         recognitionRequest?.endAudio()
         recognitionRequest = nil
+        audioCollector = nil
         
         // 音声エンジンの安全な停止
         if audioEngine.isRunning {
@@ -366,5 +371,65 @@ extension SpeechRecognitionService {
             audioData: decryptedAudioData,
             timestamp: result.timestamp
         )
+    }
+}
+
+// MARK: - Audio Buffer Policy
+
+struct AudioBufferPolicy {
+    let maxBufferedBytes: Int
+    let preferredChunkSize: Int
+    let allowTruncation: Bool
+    
+    static let `default` = AudioBufferPolicy(
+        maxBufferedBytes: 3 * 1024 * 1024,   // 3MB
+        preferredChunkSize: 256 * 1024,      // 256KB
+        allowTruncation: true
+    )
+}
+
+final class StreamingAudioCollector {
+    private let policy: AudioBufferPolicy
+    private var chunks: [Data] = []
+    private var totalBytes = 0
+    private(set) var didTruncate = false
+    
+    init(policy: AudioBufferPolicy) {
+        self.policy = policy
+        self.chunks.reserveCapacity(8)
+    }
+    
+    func append(_ data: Data) {
+        guard !data.isEmpty else { return }
+        
+        if totalBytes + data.count <= policy.maxBufferedBytes {
+            chunks.append(data)
+            totalBytes += data.count
+            return
+        }
+        
+        if !policy.allowTruncation {
+            return
+        }
+        
+        let remaining = max(0, policy.maxBufferedBytes - totalBytes)
+        if remaining > 0 {
+            let truncated = data.prefix(remaining)
+            chunks.append(Data(truncated))
+            totalBytes += truncated.count
+        }
+        didTruncate = true
+    }
+    
+    func collectedData() -> Data? {
+        guard !chunks.isEmpty else { return nil }
+        if chunks.count == 1 {
+            return chunks.first
+        }
+        var buffer = Data(capacity: min(policy.maxBufferedBytes, totalBytes))
+        for chunk in chunks {
+            buffer.append(chunk)
+        }
+        return buffer
     }
 }

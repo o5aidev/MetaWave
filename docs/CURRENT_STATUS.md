@@ -1,59 +1,54 @@
-# MetaWave v2.3 統合 - 現在の状態
+# MetaWave v2.4 再構築 - 現在の状態
 
-**最終更新**: 2025-10-29  
-**状態**: ✅ ビルド成功
+**最終更新**: 2025-11-11  
+**状態**: ✅ ビルド成功（iOS 17.0 シミュレータ）
 
 ## 📊 進捗状況
 
-### ✅ 完了（2025-10-29）
-- ✅ 8つのSwiftファイルをXcodeプロジェクトに追加
-- ✅ 型定義の追加（EmotionScore, EmotionAnalyzer, LoopCluster等）
-- ✅ ObservableObjectプロトコル修正
-- ✅ ContentViewに分析タブ追加
-- ✅ **型定義の重複解消（AnalysisTypes.swift作成）**
-- ✅ **ビルドエラー解消（0エラー）**
-- ✅ **プロトコル準拠の明示化**
+### ✅ 今日の成果（2025-11-11）
+- 高度分析モジュールを再構築  
+  - `AdvancedEmotionAnalyzer` の iOS 15/16 対応フォールバックを復元  
+  - `AnalysisVisualizationView` の `SectorMark` を iOS 17 限定に切り替え  
+- 音声入力まわりを再整備  
+  - `SpeechRecognitionService` のシミュレータ判定と到達不能コード警告を解消  
+  - `VoiceInputView_v2.1` のフォント指定を iOS 15 互換化  
+- バックアップ UI のリファクタ  
+  - `BackupSettingsView` の `try?` を `do/try/catch` に変更し警告除去  
+- アクセシビリティ／パフォーマンス関連のスタブを整理し、必要ファイルのみ再登録  
+- `PrivacyInfo.xcprivacy` を再追加し、ビルドエラーを解消
 
-### 🎉 最新の成果
-
-**2025-10-29の作業**:
-1. `AnalysisTypes.swift`を新規作成して型定義を統合
-2. 重複していた型定義を削除
-3. プロトコル準拠を明示的に宣言
-4. Xcodeプロジェクトファイルを更新
-5. **ビルド成功確認**
+### ⚠️ 保留中
+- フィードバック保存 UI・テストの再実装（未再構築）
+- `malloc` が発生した CoreData 系テストは引き続き `XCTSkip` のまま
+- 画面上の半透明オーバーレイ問題は最終工程で対応予定
 
 ## 📋 現在の構成
 
-### 分析機能
-- ✅ `TextEmotionAnalyzer`: テキスト感情分析
-- ✅ `AdvancedEmotionAnalyzer`: 高度な感情分析
-- ✅ `PatternAnalysisService`: パターン分析
-- ✅ `PredictionService`: 予測機能
-- ✅ `AnalysisService`: 統合分析サービス
-- ✅ `AnalysisTypes`: 型定義集約
+### 分析・ユーティリティ
+- ✅ `AdvancedEmotionAnalyzer` / `TextEmotionAnalyzer`
+- ✅ `AnalysisService`（詳細分析結果の Published 状態を更新）
+- ✅ `MemoryManager`・`BackgroundTaskManager`・`LaunchOptimizer` などの管理系サービス
+- ✅ `AccessibilityManager`（音声読み上げ／高コントラスト対応）
 
 ### UI
-- ✅ ContentView: 分析タブ3つに分割済み
-- ✅ InsightCardsView: 概要表示
-- ✅ PatternAnalysisView: パターン分析表示
-- ✅ PredictionView: 予測表示
+- ✅ `InsightCardsView` + 詳細分析タブ（`AnalysisVisualizationView`）
+- ✅ `BackupSettingsView`（ローカル／iCloud バックアップ）
+- ✅ `VoiceInputView_v2.1`（収録 UI）
+- ⚠️ `EnhancedAnalysisView` 系 UI は再作業中（未コミット）
 
-## 📝 次のアクション
+## 🧪 ビルド・テスト
+- ✅ Xcode 15.4 / iOS 17.0 シミュレータでビルド成功
+- ⚠️ 自動テストは未実行。`AdvancedAnalysisTests` の一部は引き続き `XCTSkip`
 
-```bash
-# 変更をコミット（推奨）
-git add MetaWave/
-git commit -m "feat: v2.3分析機能統合 - 型定義の整理とビルドエラー修正"
+## 📝 次の一手
+1. 変更内容をコミット & プッシュ（本ドキュメントを含む）
+2. フィードバック保存 UI とテストの再実装計画を整理
+3. メモリ関連テストの `malloc` 問題を調査
+4. 開発終盤で半透明オーバーレイの恒久対策
 
-# 機能テスト（Xcodeで実行）
-open MetaWave/MetaWave.xcodeproj
-```
+---
 
-## 💡 結論
-
-- **コード統合**: 100%完了 ✅
-- **ビルドエラー**: 0エラー ✅
-- **機能**: 実装済み ✅
-
-**v2.3分析機能統合が完全に完了しました！**
+**現状まとめ**  
+- 高度分析／音声入力／バックアップ周辺の主要機能は復旧完了  
+- プロジェクトはビルド可能、警告ゼロ  
+- 残課題は UI 統合とテスト体制の再構築

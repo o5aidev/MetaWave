@@ -180,7 +180,12 @@ final class AdvancedEmotionAnalyzer: EmotionAnalyzer {
         intensity += capsDensity * 0.3
         
         // 繰り返し文字
-        let repeatedChars = text.matches(of: /(.)\1{2,}/).count
+        let repeatedChars: Int
+        if #available(iOS 16.0, *) {
+            repeatedChars = text.matches(of: /(.)\1{2,}/).count
+        } else {
+            repeatedChars = countRepeatedSequences(in: text)
+        }
         intensity += Float(repeatedChars) * 0.1
         
         // 感情語の使用
@@ -233,6 +238,24 @@ final class AdvancedEmotionAnalyzer: EmotionAnalyzer {
             domains: domains.isEmpty ? [.general] : domains,
             triggers: triggers
         )
+    }
+    
+    private func countRepeatedSequences(in text: String) -> Int {
+        var count = 0
+        var previousChar: Character?
+        var runLength = 0
+        
+        for char in text {
+            if char == previousChar {
+                runLength += 1
+            } else {
+                if runLength >= 3 { count += 1 }
+                previousChar = char
+                runLength = 1
+            }
+        }
+        if runLength >= 3 { count += 1 }
+        return count
     }
     
     private func selectPrimaryEmotion(from emotions: [EmotionCategory: Float]) -> EmotionCategory {
