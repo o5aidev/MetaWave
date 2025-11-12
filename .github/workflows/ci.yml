@@ -1,0 +1,58 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main, develop, feature/**, fix/**, ci/** ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+
+    concurrency:
+      group: ios-ci-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "15.4"
+
+      - name: Install Bundler dependencies
+        if: ${{ hashFiles('Gemfile') != '' }}
+        run: bundle install --path vendor/bundle
+
+      - name: Install CocoaPods (if needed)
+        if: ${{ hashFiles('Podfile') != '' }}
+        run: pod install
+
+      - name: Build
+        run: |
+          set -o pipefail
+          xcodebuild -project MetaWave.xcodeproj \
+            -scheme "MetaWave" \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.4' \
+            build
+
+      - name: Test
+        run: |
+          set -o pipefail
+          xcodebuild -project MetaWave.xcodeproj \
+            -scheme "MetaWave" \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.4' \
+            test
+
+      - name: Archive DerivedData logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-logs
+          path: ~/Library/Logs/DiagnosticReports
+          if-no-files-found: ignore
