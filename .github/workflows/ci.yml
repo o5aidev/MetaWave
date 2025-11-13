@@ -31,6 +31,9 @@ jobs:
         if: ${{ hashFiles('Podfile') != '' }}
         run: pod install
 
+      - name: List available simulators
+        run: xcrun simctl list devices available
+
       - name: Build
         working-directory: MetaWave
         run: |
@@ -38,7 +41,7 @@ jobs:
           xcodebuild -project MetaWave.xcodeproj \
             -scheme "MetaWave" \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.4' \
+            -destination 'generic/platform=iOS Simulator' \
             build
 
       - name: Test
@@ -48,7 +51,7 @@ jobs:
           xcodebuild -project MetaWave.xcodeproj \
             -scheme "MetaWave" \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.4' \
+            -destination 'generic/platform=iOS Simulator' \
             test
 
       - name: Archive DerivedData logs
