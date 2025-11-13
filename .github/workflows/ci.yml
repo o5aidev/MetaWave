@@ -41,7 +41,7 @@ jobs:
           xcodebuild -project MetaWave.xcodeproj \
             -scheme "MetaWave" \
             -configuration Debug \
-            -destination 'generic/platform=iOS Simulator' \
+            -sdk iphonesimulator \
             build
 
       - name: Test
@@ -51,7 +51,7 @@ jobs:
           xcodebuild -project MetaWave.xcodeproj \
             -scheme "MetaWave" \
             -configuration Debug \
-            -destination 'generic/platform=iOS Simulator' \
+            -sdk iphonesimulator \
             test
 
       - name: Archive DerivedData logs
