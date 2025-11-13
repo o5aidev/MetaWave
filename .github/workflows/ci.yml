@@ -32,6 +32,7 @@ jobs:
         run: pod install
 
       - name: Build
+        working-directory: MetaWave
         run: |
           set -o pipefail
           xcodebuild -project MetaWave.xcodeproj \
@@ -41,6 +42,7 @@ jobs:
             build
 
       - name: Test
+        working-directory: MetaWave
         run: |
           set -o pipefail
           xcodebuild -project MetaWave.xcodeproj \
