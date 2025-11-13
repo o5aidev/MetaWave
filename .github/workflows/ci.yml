@@ -44,23 +44,19 @@ jobs:
         run: |
           set -o pipefail
           set -x
-          # Try to get simulator ID from xcodebuild -showdestinations first
-          echo "Fetching available destinations from xcodebuild..."
-          DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
-          echo "Destinations output:"
-          echo "$DEST_OUTPUT"
-          # Extract first iPhone simulator ID (excluding placeholders)
-          DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -i "iPhone" | grep -v "placeholder" | head -1 | sed -E 's/.*id:([A-F0-9-]+).*/\1/' | tr -d ' ')
+          # Try to get simulator ID from xcrun simctl first (more reliable)
+          echo "Fetching available simulators from xcrun simctl..."
+          SIM_OUTPUT=$(xcrun simctl list devices available | grep -i "iPhone" | head -1)
+          echo "Simulator output: $SIM_OUTPUT"
+          DEST=$(echo "$SIM_OUTPUT" | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
+          # If empty, try xcodebuild -showdestinations as fallback
           if [ -z "$DEST" ]; then
-            # Fallback to any iOS Simulator (excluding placeholders)
+            echo "xcrun simctl returned no iPhone, trying xcodebuild -showdestinations..."
+            DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
+            echo "Destinations output:"
+            echo "$DEST_OUTPUT"
+            # Extract first iOS Simulator ID (excluding placeholders)
             DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -v "placeholder" | head -1 | sed -E 's/.*id:([A-F0-9-]+).*/\1/' | tr -d ' ')
-          fi
-          # If still empty, try xcrun simctl as fallback
-          if [ -z "$DEST" ]; then
-            echo "xcodebuild returned only placeholders, trying xcrun simctl..."
-            SIM_OUTPUT=$(xcrun simctl list devices available | grep -i "iPhone" | head -1)
-            echo "Simulator output: $SIM_OUTPUT"
-            DEST=$(echo "$SIM_OUTPUT" | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
           fi
           echo "Extracted destination ID: '$DEST'"
           if [ -z "$DEST" ]; then
@@ -84,21 +80,17 @@ jobs:
         run: |
           set -o pipefail
           set -x
-          # Try to get simulator ID from xcodebuild -showdestinations first
-          echo "Fetching available destinations from xcodebuild..."
-          DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
-          # Extract first iPhone simulator ID (excluding placeholders)
-          DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -i "iPhone" | grep -v "placeholder" | head -1 | sed -E 's/.*id:([A-F0-9-]+).*/\1/' | tr -d ' ')
+          # Try to get simulator ID from xcrun simctl first (more reliable)
+          echo "Fetching available simulators from xcrun simctl..."
+          SIM_OUTPUT=$(xcrun simctl list devices available | grep -i "iPhone" | head -1)
+          echo "Simulator output: $SIM_OUTPUT"
+          DEST=$(echo "$SIM_OUTPUT" | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
+          # If empty, try xcodebuild -showdestinations as fallback
           if [ -z "$DEST" ]; then
-            # Fallback to any iOS Simulator (excluding placeholders)
+            echo "xcrun simctl returned no iPhone, trying xcodebuild -showdestinations..."
+            DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
+            # Extract first iOS Simulator ID (excluding placeholders)
             DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -v "placeholder" | head -1 | sed -E 's/.*id:([A-F0-9-]+).*/\1/' | tr -d ' ')
-          fi
-          # If still empty, try xcrun simctl as fallback
-          if [ -z "$DEST" ]; then
-            echo "xcodebuild returned only placeholders, trying xcrun simctl..."
-            SIM_OUTPUT=$(xcrun simctl list devices available | grep -i "iPhone" | head -1)
-            echo "Simulator output: $SIM_OUTPUT"
-            DEST=$(echo "$SIM_OUTPUT" | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
           fi
           echo "Extracted destination ID: '$DEST'"
           if [ -z "$DEST" ]; then
