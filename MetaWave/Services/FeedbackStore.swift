@@ -12,7 +12,7 @@ actor FeedbackStore {
     private let decoder: JSONDecoder
     private let subject = CurrentValueSubject<[FeedbackEntry], Never>([])
     
-    var entriesPublisher: AnyPublisher<[FeedbackEntry], Never> {
+    nonisolated var entriesPublisher: AnyPublisher<[FeedbackEntry], Never> {
         subject.eraseToAnyPublisher()
     }
     
