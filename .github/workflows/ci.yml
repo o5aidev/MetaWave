@@ -45,35 +45,35 @@ jobs:
           set -o pipefail
           set -x
           # Try to get simulator ID from xcrun simctl first (more reliable)
-          echo "Fetching available simulators from xcrun simctl..."
-          SIM_OUTPUT=$(xcrun simctl list devices available | grep -i "iPhone" | head -1)
-          echo "Simulator output: $SIM_OUTPUT"
-          DEST=$(echo "$SIM_OUTPUT" | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
+          echo "=== Fetching available simulators from xcrun simctl ==="
+          SIM_LIST=$(xcrun simctl list devices available)
+          echo "Full simulator list:"
+          echo "$SIM_LIST"
+          SIM_OUTPUT=$(echo "$SIM_LIST" | grep -i "iPhone" | head -1)
+          echo "First iPhone simulator line: '$SIM_OUTPUT'"
+          # Extract UUID from format like "iPhone 16 (0F6A0D63-B1F4-4F46-8021-E86CE5FB0ECF)"
+          DEST=$(echo "$SIM_OUTPUT" | sed -nE 's/.*\(([A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12})\).*/\1/p')
+          echo "Extracted destination ID from xcrun simctl: '$DEST'"
           # If empty, try xcodebuild -showdestinations as fallback
           if [ -z "$DEST" ]; then
-            echo "xcrun simctl returned no iPhone, trying xcodebuild -showdestinations..."
+            echo "=== xcrun simctl returned no iPhone, trying xcodebuild -showdestinations ==="
             DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
             echo "Destinations output:"
             echo "$DEST_OUTPUT"
-            # Extract first iOS Simulator ID (excluding placeholders)
-            DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -v "placeholder" | head -1 | sed -E 's/.*id:([A-F0-9-]+).*/\1/' | tr -d ' ')
+            # Extract first iOS Simulator ID (excluding placeholders and macOS)
+            DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -v "placeholder" | grep -v "platform:macOS" | head -1 | sed -nE 's/.*id:([A-F0-9-]+).*/\1/p' | tr -d ' ')
+            echo "Extracted destination ID from xcodebuild: '$DEST'"
           fi
-          echo "Extracted destination ID: '$DEST'"
           if [ -z "$DEST" ]; then
-            echo "No simulator destination found, trying with SDK only"
-            xcodebuild -project MetaWave.xcodeproj \
-              -scheme "MetaWave" \
-              -configuration Debug \
-              -sdk iphonesimulator \
-              build 2>&1 | tee build.log || (cat build.log && exit 1)
-          else
-            echo "Using destination: $DEST"
-            xcodebuild -project MetaWave.xcodeproj \
-              -scheme "MetaWave" \
-              -configuration Debug \
-              -destination "platform=iOS Simulator,id=$DEST" \
-              build 2>&1 | tee build.log || (cat build.log && exit 1)
+            echo "ERROR: No simulator destination found"
+            exit 1
           fi
+          echo "=== Using destination: platform=iOS Simulator,id=$DEST ==="
+          xcodebuild -project MetaWave.xcodeproj \
+            -scheme "MetaWave" \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=$DEST" \
+            build 2>&1 | tee build.log || (cat build.log && exit 1)
 
       - name: Test
         working-directory: MetaWave
@@ -81,33 +81,35 @@ jobs:
           set -o pipefail
           set -x
           # Try to get simulator ID from xcrun simctl first (more reliable)
-          echo "Fetching available simulators from xcrun simctl..."
-          SIM_OUTPUT=$(xcrun simctl list devices available | grep -i "iPhone" | head -1)
-          echo "Simulator output: $SIM_OUTPUT"
-          DEST=$(echo "$SIM_OUTPUT" | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
+          echo "=== Fetching available simulators from xcrun simctl ==="
+          SIM_LIST=$(xcrun simctl list devices available)
+          echo "Full simulator list:"
+          echo "$SIM_LIST"
+          SIM_OUTPUT=$(echo "$SIM_LIST" | grep -i "iPhone" | head -1)
+          echo "First iPhone simulator line: '$SIM_OUTPUT'"
+          # Extract UUID from format like "iPhone 16 (0F6A0D63-B1F4-4F46-8021-E86CE5FB0ECF)"
+          DEST=$(echo "$SIM_OUTPUT" | sed -nE 's/.*\(([A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12})\).*/\1/p')
+          echo "Extracted destination ID from xcrun simctl: '$DEST'"
           # If empty, try xcodebuild -showdestinations as fallback
           if [ -z "$DEST" ]; then
-            echo "xcrun simctl returned no iPhone, trying xcodebuild -showdestinations..."
+            echo "=== xcrun simctl returned no iPhone, trying xcodebuild -showdestinations ==="
             DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
-            # Extract first iOS Simulator ID (excluding placeholders)
-            DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -v "placeholder" | head -1 | sed -E 's/.*id:([A-F0-9-]+).*/\1/' | tr -d ' ')
+            echo "Destinations output:"
+            echo "$DEST_OUTPUT"
+            # Extract first iOS Simulator ID (excluding placeholders and macOS)
+            DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -v "placeholder" | grep -v "platform:macOS" | head -1 | sed -nE 's/.*id:([A-F0-9-]+).*/\1/p' | tr -d ' ')
+            echo "Extracted destination ID from xcodebuild: '$DEST'"
           fi
-          echo "Extracted destination ID: '$DEST'"
           if [ -z "$DEST" ]; then
-            echo "No simulator destination found, trying with SDK only"
-            xcodebuild -project MetaWave.xcodeproj \
-              -scheme "MetaWave" \
-              -configuration Debug \
-              -sdk iphonesimulator \
-              test 2>&1 | tee test.log || (cat test.log && exit 1)
-          else
-            echo "Using destination: $DEST"
-            xcodebuild -project MetaWave.xcodeproj \
-              -scheme "MetaWave" \
-              -configuration Debug \
-              -destination "platform=iOS Simulator,id=$DEST" \
-              test 2>&1 | tee test.log || (cat test.log && exit 1)
+            echo "ERROR: No simulator destination found"
+            exit 1
           fi
+          echo "=== Using destination: platform=iOS Simulator,id=$DEST ==="
+          xcodebuild -project MetaWave.xcodeproj \
+            -scheme "MetaWave" \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=$DEST" \
+            test 2>&1 | tee test.log || (cat test.log && exit 1)
 
       - name: Archive DerivedData logs
         if: always()
