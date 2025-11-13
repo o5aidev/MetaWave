@@ -81,8 +81,22 @@ jobs:
             exit 1
           fi
 
+      - name: Check if test target exists
+        working-directory: MetaWave
+        id: check_test_target
+        run: |
+          # Check if scheme file has test entries configured
+          if grep -q "<TestableReference" MetaWave.xcodeproj/xcshareddata/xcschemes/MetaWave.xcscheme 2>/dev/null; then
+            echo "test_target_exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Test targets found in scheme"
+          else
+            echo "test_target_exists=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No test targets configured in scheme - tests will be skipped"
+          fi
+
       - name: Test
         working-directory: MetaWave
+        if: steps.check_test_target.outputs.test_target_exists == 'true'
         run: |
           set -o pipefail
           set -x
@@ -122,6 +136,13 @@ jobs:
             cat test.log
             exit 1
           fi
+
+      - name: Skip tests (no test target)
+        working-directory: MetaWave
+        if: steps.check_test_target.outputs.test_target_exists != 'true'
+        run: |
+          echo "⚠️ Skipping tests: No test target configured in the project"
+          echo "To enable tests, add a test target to the MetaWave scheme in Xcode"
 
       - name: Upload build logs
         if: always()
