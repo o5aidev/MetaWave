@@ -34,25 +34,53 @@ jobs:
       - name: List available simulators
         run: xcrun simctl list devices available
 
+      - name: Show available destinations
+        working-directory: MetaWave
+        run: xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations
+
       - name: Build
         working-directory: MetaWave
         run: |
           set -o pipefail
-          xcodebuild -project MetaWave.xcodeproj \
-            -scheme "MetaWave" \
-            -configuration Debug \
-            -sdk iphonesimulator \
-            build
+          # Get the first available iOS Simulator destination
+          DEST=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1 | grep "platform:iOS Simulator" | head -1 | sed -E 's/.*id:([^,]+).*/\1/' | tr -d ' ')
+          if [ -z "$DEST" ]; then
+            echo "No simulator destination found, trying generic"
+            xcodebuild -project MetaWave.xcodeproj \
+              -scheme "MetaWave" \
+              -configuration Debug \
+              -sdk iphonesimulator \
+              build
+          else
+            echo "Using destination: $DEST"
+            xcodebuild -project MetaWave.xcodeproj \
+              -scheme "MetaWave" \
+              -configuration Debug \
+              -destination "platform=iOS Simulator,id=$DEST" \
+              build
+          fi
 
       - name: Test
         working-directory: MetaWave
         run: |
           set -o pipefail
-          xcodebuild -project MetaWave.xcodeproj \
-            -scheme "MetaWave" \
-            -configuration Debug \
-            -sdk iphonesimulator \
-            test
+          # Get the first available iOS Simulator destination
+          DEST=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1 | grep "platform:iOS Simulator" | head -1 | sed -E 's/.*id:([^,]+).*/\1/' | tr -d ' ')
+          if [ -z "$DEST" ]; then
+            echo "No simulator destination found, trying generic"
+            xcodebuild -project MetaWave.xcodeproj \
+              -scheme "MetaWave" \
+              -configuration Debug \
+              -sdk iphonesimulator \
+              test
+          else
+            echo "Using destination: $DEST"
+            xcodebuild -project MetaWave.xcodeproj \
+              -scheme "MetaWave" \
+              -configuration Debug \
+              -destination "platform=iOS Simulator,id=$DEST" \
+              test
+          fi
 
       - name: Archive DerivedData logs
         if: always()
