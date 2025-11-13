@@ -42,44 +42,54 @@ jobs:
         working-directory: MetaWave
         run: |
           set -o pipefail
+          set -x
           # Get the first available iOS Simulator destination
-          DEST=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1 | grep "platform:iOS Simulator" | head -1 | sed -E 's/.*id:([^,]+).*/\1/' | tr -d ' ')
+          echo "Fetching available destinations..."
+          DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
+          echo "Destinations output:"
+          echo "$DEST_OUTPUT"
+          DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | head -1 | sed -E 's/.*id:([^,]+).*/\1/' | tr -d ' ')
+          echo "Extracted destination ID: '$DEST'"
           if [ -z "$DEST" ]; then
-            echo "No simulator destination found, trying generic"
+            echo "No simulator destination found, trying with SDK only"
             xcodebuild -project MetaWave.xcodeproj \
               -scheme "MetaWave" \
               -configuration Debug \
               -sdk iphonesimulator \
-              build
+              build 2>&1 | tee build.log || (cat build.log && exit 1)
           else
             echo "Using destination: $DEST"
             xcodebuild -project MetaWave.xcodeproj \
               -scheme "MetaWave" \
               -configuration Debug \
               -destination "platform=iOS Simulator,id=$DEST" \
-              build
+              build 2>&1 | tee build.log || (cat build.log && exit 1)
           fi
 
       - name: Test
         working-directory: MetaWave
         run: |
           set -o pipefail
+          set -x
           # Get the first available iOS Simulator destination
-          DEST=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1 | grep "platform:iOS Simulator" | head -1 | sed -E 's/.*id:([^,]+).*/\1/' | tr -d ' ')
+          echo "Fetching available destinations..."
+          DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
+          DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | head -1 | sed -E 's/.*id:([^,]+).*/\1/' | tr -d ' ')
+          echo "Extracted destination ID: '$DEST'"
           if [ -z "$DEST" ]; then
-            echo "No simulator destination found, trying generic"
+            echo "No simulator destination found, trying with SDK only"
             xcodebuild -project MetaWave.xcodeproj \
               -scheme "MetaWave" \
               -configuration Debug \
               -sdk iphonesimulator \
-              test
+              test 2>&1 | tee test.log || (cat test.log && exit 1)
           else
             echo "Using destination: $DEST"
             xcodebuild -project MetaWave.xcodeproj \
               -scheme "MetaWave" \
               -configuration Debug \
               -destination "platform=iOS Simulator,id=$DEST" \
-              test
+              test 2>&1 | tee test.log || (cat test.log && exit 1)
           fi
 
       - name: Archive DerivedData logs
