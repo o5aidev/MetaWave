@@ -69,11 +69,17 @@ jobs:
             exit 1
           fi
           echo "=== Using destination: platform=iOS Simulator,id=$DEST ==="
-          xcodebuild -project MetaWave.xcodeproj \
+          if xcodebuild -project MetaWave.xcodeproj \
             -scheme "MetaWave" \
             -configuration Debug \
             -destination "platform=iOS Simulator,id=$DEST" \
-            build 2>&1 | tee build.log || (cat build.log && exit 1)
+            build 2>&1 | tee build.log; then
+            echo "✅ Build succeeded"
+          else
+            echo "❌ Build failed. Full build log:"
+            cat build.log
+            exit 1
+          fi
 
       - name: Test
         working-directory: MetaWave
@@ -105,11 +111,27 @@ jobs:
             exit 1
           fi
           echo "=== Using destination: platform=iOS Simulator,id=$DEST ==="
-          xcodebuild -project MetaWave.xcodeproj \
+          if xcodebuild -project MetaWave.xcodeproj \
             -scheme "MetaWave" \
             -configuration Debug \
             -destination "platform=iOS Simulator,id=$DEST" \
-            test 2>&1 | tee test.log || (cat test.log && exit 1)
+            test 2>&1 | tee test.log; then
+            echo "✅ Tests succeeded"
+          else
+            echo "❌ Tests failed. Full test log:"
+            cat test.log
+            exit 1
+          fi
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            MetaWave/build.log
+            MetaWave/test.log
+          if-no-files-found: ignore
 
       - name: Archive DerivedData logs
         if: always()
