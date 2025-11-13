@@ -44,12 +44,11 @@ jobs:
         run: |
           set -o pipefail
           set -x
-          # Get the first available iOS Simulator destination (excluding placeholders)
-          echo "Fetching available destinations..."
-          DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
-          echo "Destinations output:"
-          echo "$DEST_OUTPUT"
-          DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -v "placeholder" | head -1 | sed -E 's/.*id:([^,]+).*/\1/' | tr -d ' ')
+          # Get the first available iPhone simulator ID from simctl
+          echo "Fetching available simulators..."
+          SIM_OUTPUT=$(xcrun simctl list devices available | grep -i "iPhone" | head -1)
+          echo "Simulator output: $SIM_OUTPUT"
+          DEST=$(echo "$SIM_OUTPUT" | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
           echo "Extracted destination ID: '$DEST'"
           if [ -z "$DEST" ]; then
             echo "No simulator destination found, trying with SDK only"
@@ -72,10 +71,11 @@ jobs:
         run: |
           set -o pipefail
           set -x
-          # Get the first available iOS Simulator destination (excluding placeholders)
-          echo "Fetching available destinations..."
-          DEST_OUTPUT=$(xcodebuild -project MetaWave.xcodeproj -scheme MetaWave -showdestinations 2>&1)
-          DEST=$(echo "$DEST_OUTPUT" | grep "platform:iOS Simulator" | grep -v "placeholder" | head -1 | sed -E 's/.*id:([^,]+).*/\1/' | tr -d ' ')
+          # Get the first available iPhone simulator ID from simctl
+          echo "Fetching available simulators..."
+          SIM_OUTPUT=$(xcrun simctl list devices available | grep -i "iPhone" | head -1)
+          echo "Simulator output: $SIM_OUTPUT"
+          DEST=$(echo "$SIM_OUTPUT" | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
           echo "Extracted destination ID: '$DEST'"
           if [ -z "$DEST" ]; then
             echo "No simulator destination found, trying with SDK only"
