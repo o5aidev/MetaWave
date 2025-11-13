@@ -1,6 +1,7 @@
-cat > .gitignore <<'EOF'
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
 
 # Xcode build and user data
 DerivedData/
@@ -8,6 +9,48 @@ build/
 *.xcuserdatad/
 *.xcscmblueprint
 xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcuserstate
+*.xcuserstate.*
 
 # Autocreated or local-only
 *.xctestplan
+
+# Secrets and sensitive files
+.env
+.env.local
+.env.*.local
+*.secret
+*.key
+*.pem
+*.p12
+secrets/
+config/secrets.json
+*.credentials
+
+# API Keys and tokens (if any are added in future)
+**/APIKeys.swift
+**/Secrets.swift
+**/Config.swift
+
+# Local configuration
+local_config.json
+user_config.json
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# CocoaPods (if used)
+Pods/
+*.xcworkspace
+
+# Swift Package Manager
+.swiftpm/
+.build/
