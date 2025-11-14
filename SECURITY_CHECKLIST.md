@@ -95,3 +95,4 @@ find . -type f -size +1M -not -path "./.git/*"
 find . -type f -exec file {} \; | grep -i "binary\|executable"
 ```
 
+

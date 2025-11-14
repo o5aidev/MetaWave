@@ -104,3 +104,4 @@ grep -riE "(api[_-]?key|secret|password|token)" --exclude-dir=.git .
 
 準備完了です！
 
+
